@@ -13,6 +13,35 @@ Versioning: [Semantic Versioning](https://semver.org/)
 ## [Unreleased]
 
 ---
+## [0.3.0] — 2026-05-06
+
+### Added
+- `app/(auth)/login/page.tsx` — login page with sunflower logo, email/password form, error display
+- `actions/auth.ts` — `signIn` and `signOut` server actions (Supabase SSR)
+- `app/(app)/layout.tsx` — main app shell with desktop navbar and mobile bottom navigation
+- `app/(app)/page.tsx` — home page placeholder (inside `(app)` route group, gets navbar layout)
+- `app/(app)/timeline/page.tsx` — timeline placeholder (redirect target after login)
+
+### Changed
+- `middleware.ts` renamed to `proxy.ts`, exported function renamed `middleware` → `proxy` (Next.js 16 breaking change)
+- `package.json` version bumped to `0.3.0`
+
+### Fixed
+- `app/page.tsx` (outside `(app)` group, no layout) removed — replaced by `app/(app)/page.tsx` to correctly inherit navbar layout
+
+---
+## [0.3.0] — 2026-05-06
+
+### Added
+- `app/(auth)/login/page.tsx` — login page with sunflower logo, email/password form, error display
+- `actions/auth.ts` — `signIn` and `signOut` server actions (Supabase SSR)
+- `app/(app)/layout.tsx` — main app shell with desktop navbar and mobile bottom navigation
+- `app/(app)/timeline/page.tsx` — placeholder page (redirect target after login)
+
+### Changed
+- `middleware.ts` renamed to `proxy.ts`, exported function renamed `middleware` → `proxy` (Next.js 16 breaking change)
+
+---
 
 ## [0.2.0] — 2026-05-06
 
@@ -43,6 +72,7 @@ Versioning: [Semantic Versioning](https://semver.org/)
 - `.npmrc` with `legacy-peer-deps=true`
 - Git repo initialized, `master` + `develop` branches pushed to GitHub
 
-[Unreleased]: https://github.com/Chris-Verichon/vivara/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/Chris-Verichon/vivara/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/Chris-Verichon/vivara/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/Chris-Verichon/vivara/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/Chris-Verichon/vivara/releases/tag/v0.1.0
