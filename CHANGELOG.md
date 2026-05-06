@@ -13,6 +13,18 @@ Versioning: [Semantic Versioning](https://semver.org/)
 ## [Unreleased]
 
 ---
+## [0.4.0] — 2026-05-06
+
+### Added
+- `components/providers/QueryProvider.tsx` — TanStack Query client provider (staleTime 60s, no refetch on window focus)
+- `components/memory-card/MemoryCardSkeleton.tsx` — skeleton loading placeholder for memory cards (`MemoryCardSkeleton` + `MemoryCardSkeletonGrid`)
+- `lib/utils.ts` — `formatMemoryDate()` (fr-FR locale), `getYear()`, `countryCodeToName()` (fr-FR), `truncate()` helpers
+
+### Changed
+- `app/layout.tsx` — root layout now wraps children with `QueryProvider`
+- `package.json` version bumped to `0.4.0`
+
+---
 ## [0.3.0] — 2026-05-06
 
 ### Added
@@ -72,7 +84,8 @@ Versioning: [Semantic Versioning](https://semver.org/)
 - `.npmrc` with `legacy-peer-deps=true`
 - Git repo initialized, `master` + `develop` branches pushed to GitHub
 
-[Unreleased]: https://github.com/Chris-Verichon/vivara/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/Chris-Verichon/vivara/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/Chris-Verichon/vivara/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/Chris-Verichon/vivara/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/Chris-Verichon/vivara/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/Chris-Verichon/vivara/releases/tag/v0.1.0
