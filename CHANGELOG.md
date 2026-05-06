@@ -14,6 +14,16 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [0.2.0] — 2026-05-06
+
+### Added
+- SQL migration `001_core_tables.sql` — tables `memories`, `media_files`, `site_config` with indexes and `updated_at` auto-trigger
+- SQL migration `002_rls_policies.sql` — Row Level Security enabled on all tables with fine-grained policies
+- SQL migration `003_storage.sql` — private Storage bucket `memories` (200 MB limit) with per-user folder policies
+- Supabase project created, first admin user created via Auth dashboard
+
+---
+
 ## [0.1.0] — 2026-05-06
 
 ### Added
@@ -33,5 +43,6 @@ Versioning: [Semantic Versioning](https://semver.org/)
 - `.npmrc` with `legacy-peer-deps=true`
 - Git repo initialized, `master` + `develop` branches pushed to GitHub
 
-[Unreleased]: https://github.com/Chris-Verichon/vivara/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/Chris-Verichon/vivara/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/Chris-Verichon/vivara/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/Chris-Verichon/vivara/releases/tag/v0.1.0
