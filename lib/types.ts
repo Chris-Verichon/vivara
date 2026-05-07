@@ -2,29 +2,34 @@
 
 export type Json = string | number | boolean | null | { [key: string]: Json } | Json[]
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       memories: {
         Row: Memory
         Insert: MemoryInsert
         Update: MemoryUpdate
+        Relationships: []
       }
       media_files: {
         Row: MediaFile
         Insert: MediaFileInsert
         Update: Partial<MediaFileInsert>
+        Relationships: []
       }
       site_config: {
         Row: SiteConfig
         Insert: SiteConfig
         Update: Partial<SiteConfig>
+        Relationships: []
       }
     }
+    Views: Record<never, never>
+    Functions: Record<never, never>
   }
 }
 
-export interface Memory {
+export type Memory = {
   id: string
   user_id: string
   title: string
@@ -40,7 +45,7 @@ export interface Memory {
 export type MemoryInsert = Omit<Memory, "id" | "created_at" | "updated_at">
 export type MemoryUpdate = Partial<MemoryInsert>
 
-export interface MediaFile {
+export type MediaFile = {
   id: string
   memory_id: string
   storage_path: string
@@ -56,13 +61,13 @@ export interface MediaFile {
 
 export type MediaFileInsert = Omit<MediaFile, "id" | "created_at">
 
-export interface SiteConfig {
+export type SiteConfig = {
   key: string
   value: string | null
   updated_at: string
 }
 
 // Composite type used throughout the app
-export interface MemoryWithMedia extends Memory {
+export type MemoryWithMedia = Memory & {
   media_files: MediaFile[]
 }

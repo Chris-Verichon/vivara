@@ -13,7 +13,7 @@ interface MemoryCardProps {
 
 function getMediaUrl(storagePath: string): string {
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL
-  return `${base}/storage/v1/object/public/${storagePath}`
+  return `${base}/storage/v1/object/public/memories/${storagePath}`
 }
 
 function formatDate(isoDate: string): string {
