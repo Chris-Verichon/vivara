@@ -2,7 +2,8 @@ import { signOut } from "@/actions/auth"
 import { createClient } from "@/lib/supabase/server"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { Clock, Globe, ImageIcon, Settings } from "lucide-react"
+import { Clock, Globe, ImageIcon, Settings, LeafIcon } from "lucide-react"
+import { MobileNav } from "@/components/nav/MobileNav"
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -13,11 +14,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   if (!user) redirect("/login")
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
-      {/* Desktop navbar */}
-      <header className="hidden md:flex items-center justify-between px-8 py-4 bg-white/80 backdrop-blur-sm border-b border-[#F4B8C1]/30 sticky top-0 z-40">
+    <div className="min-h-screen bg-white flex flex-col">
+      {/* Navbar — visible on all screen sizes */}
+      <header className="flex items-center justify-between px-6 md:px-8 py-4 bg-white/80 backdrop-blur-sm border-b border-black/10 sticky top-0 z-40">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-xl select-none">🌻</span>
+          <LeafIcon size={24} className="text-[#C9748A]" />
           <span
             className="text-xl text-[#C9748A]"
             style={{ fontFamily: "var(--font-playfair)" }}
@@ -26,7 +27,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           </span>
         </Link>
 
-        <nav className="flex items-center gap-6">
+        {/* Desktop nav links */}
+        <nav className="hidden md:flex items-center gap-6">
           <Link
             href="/timeline"
             className="flex items-center gap-1.5 text-sm text-[#888888] hover:text-[#C9748A] transition-colors"
@@ -50,7 +52,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           </Link>
         </nav>
 
-        <div className="flex items-center gap-4">
+        {/* Desktop right actions */}
+        <div className="hidden md:flex items-center gap-4">
           <Link
             href="/settings"
             className="text-[#888888] hover:text-[#C9748A] transition-colors"
@@ -67,42 +70,18 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             </button>
           </form>
         </div>
+
+        {/* Mobile burger */}
+        <MobileNav />
       </header>
 
       {/* Page content */}
-      <main className="flex-1 pb-20 md:pb-0">{children}</main>
+      <main className="flex-1">{children}</main>
 
-      {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#F4B8C1]/30 flex items-center justify-around px-2 py-2 safe-area-pb">
-        <Link
-          href="/timeline"
-          className="flex flex-col items-center gap-0.5 text-[#888888] hover:text-[#C9748A] transition-colors p-2"
-        >
-          <Clock size={22} />
-          <span className="text-[10px]">Timeline</span>
-        </Link>
-        <Link
-          href="/world"
-          className="flex flex-col items-center gap-0.5 text-[#888888] hover:text-[#C9748A] transition-colors p-2"
-        >
-          <Globe size={22} />
-          <span className="text-[10px]">World</span>
-        </Link>
-        <Link
-          href="/gallery"
-          className="flex flex-col items-center gap-0.5 text-[#888888] hover:text-[#C9748A] transition-colors p-2"
-        >
-          <ImageIcon size={22} />
-          <span className="text-[10px]">Gallery</span>
-        </Link>
-        <Link
-          href="/memory/new"
-          className="flex flex-col items-center gap-0.5 bg-[#C9748A] text-white rounded-xl px-4 py-2 hover:bg-[#b5637a] transition-colors"
-        >
-          <span className="text-xl leading-none">+</span>
-          <span className="text-[10px]">Add</span>
-        </Link>
-      </nav>
+      {/* Footer */}
+      <footer className="border-t border-black/10 px-8 py-4 text-center text-xs text-[#888888]">
+        © {new Date().getFullYear()} Chris Verichon — Tous droits réservés
+      </footer>
     </div>
   )
 }
