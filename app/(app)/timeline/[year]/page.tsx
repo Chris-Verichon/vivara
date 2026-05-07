@@ -21,7 +21,7 @@ async function getYearData(year: number) {
     .order("position", { ascending: true, referencedTable: "media_files" })
 
   if (error) return null
-  return (data ?? []) as MemoryWithMedia[]
+  return (data ?? []) as unknown as MemoryWithMedia[]
 }
 
 async function getAdjacentYears(year: number) {
