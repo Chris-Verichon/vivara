@@ -8,6 +8,15 @@ Versioning: [Semantic Versioning](https://semver.org/)
 > **Roadmap**
 > `0.1.0` Project setup → `0.2.0` Supabase → `0.3.0` Auth & UI shell → `0.4.0` Home animation → `0.5.0` Timeline → `0.6.0` Memory CRUD → `0.7.0` Gallery → `0.8.0` World map → `0.9.0` Mobile & config → **`1.0.0` Production release**
 
+## [0.9.0] — 2026-05-07
+### Added
+- `components/lightbox/Lightbox.tsx` — fullscreen overlay with keyboard navigation (←/→/Escape), backdrop close, react-player for video
+- `components/memory-card/MemoryMediaGallery.tsx` — client-side media grid with lightbox trigger
+- `app/(app)/memory/[id]/page.tsx` — memory detail page with title, date, country, tags, description, media gallery, edit link
+### Fixed
+- `lib/types.ts` — converted `Memory`, `MediaFile`, `SiteConfig` from `interface` to `type` so they satisfy Supabase SDK `GenericSchema` constraint (fixes `never[]` insert type errors)
+- `app/(app)/timeline/[year]/page.tsx` and `app/(app)/memory/[id]/page.tsx` — use `as unknown as MemoryWithMedia` for Supabase join cast
+
 ---
 
 ## [Unreleased]
