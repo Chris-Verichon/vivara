@@ -55,7 +55,7 @@ export default async function TimelinePage() {
           </p>
         </div>
         <Link
-          href="/memories/new"
+          href="/memory/new"
           className="flex items-center gap-2 bg-[#C9748A] text-white text-sm px-4 py-2 rounded-xl hover:bg-[#b5637a] transition-colors"
         >
           <Plus size={16} />

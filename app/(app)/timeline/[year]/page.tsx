@@ -103,7 +103,7 @@ export default async function YearPage({ params }: Props) {
             </Link>
           )}
           <Link
-            href="/memories/new"
+            href={`/memory/new?year=${year}`}
             className="flex items-center gap-2 bg-[#C9748A] hover:bg-[#b5637a] text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors"
           >
             <Plus size={15} />
@@ -117,7 +117,7 @@ export default async function YearPage({ params }: Props) {
         <div className="flex flex-col items-center justify-center py-24 gap-3 text-center">
           <p className="text-[#888888]">Pas encore de souvenirs pour {year}.</p>
           <Link
-            href="/memories/new"
+            href={`/memory/new?year=${year}`}
             className="text-sm text-[#C9748A] hover:underline"
           >
             Ajouter le premier
