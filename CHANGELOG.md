@@ -13,6 +13,20 @@ Versioning: [Semantic Versioning](https://semver.org/)
 ## [Unreleased]
 
 ---
+## [0.5.0] — 2026-05-07
+
+### Added
+- `components/hero/FlowerHero.tsx` — full-viewport video hero with intro → loop seamless switch (VP9/WebM + H.264/MP4 for Safari), scroll-driven rotation (-7° → 0° via Framer Motion spring)
+- `components/nav/MobileNav.tsx` — mobile burger menu with top drawer (replaces bottom navigation bar)
+- `public/videos/` — `flower-intro.webm/mp4` + `flower-loop.webm/mp4` (converted from `.mov` with transparent background via ffmpeg VP9 alpha)
+
+### Changed
+- `app/(app)/page.tsx` — home page restructured: `FlowerHero` full-screen hero above fold, welcome section + entry cards + last 3 memories below fold
+- `app/(app)/layout.tsx` — navbar now visible on all screen sizes; mobile bottom nav removed; burger menu added; topbar/footer separator changed from rose to `black/10`; footer now visible on all screen sizes
+- `app/globals.css` — `--background` changed from linen (`oklch(0.979 0.008 76)`) to pure white (`oklch(1 0 0)`) to match topbar
+- `package.json` version bumped to `0.5.0`
+
+---
 ## [0.4.0] — 2026-05-06
 
 ### Added
