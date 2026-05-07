@@ -13,6 +13,17 @@ Versioning: [Semantic Versioning](https://semver.org/)
 ## [Unreleased]
 
 ---
+## [0.8.0] — 2026-05-07
+
+### Added
+- `components/upload/DropZone.tsx` — drag-and-drop + click file picker; client-side image compression (`browser-image-compression`, max 10 MB), video size guard (max 200 MB), first-frame video thumbnail via `<canvas>`, drag-to-reorder previews, cover badge on first file
+- `actions/memories.ts` — `createMemory` server action: inserts `memories` row + `media_files` rows, redirects to `/memory/[id]`
+- `app/(app)/memory/new/page.tsx` — create memory form: title, date, description, country autocomplete (ISO 3166-1), tags, media upload with per-file progress; pre-fills date from `?year=YYYY` query param
+
+### Changed
+- `package.json` version bumped to `0.8.0`
+
+---
 ## [0.7.0] — 2026-05-07
 
 ### Added
