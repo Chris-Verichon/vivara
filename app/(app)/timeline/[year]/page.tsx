@@ -1,14 +1,9 @@
 import { createClient } from "@/lib/supabase/server"
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, ArrowRight, Plus, MapPin, Calendar } from "lucide-react"
-import { formatMemoryDate } from "@/lib/utils"
-import type { Memory } from "@/lib/types"
-
-type MemoryPreview = Pick<
-  Memory,
-  "id" | "title" | "description" | "memory_date" | "country_name"
->
+import { ArrowLeft, ArrowRight, Plus } from "lucide-react"
+import { MemoryCard } from "@/components/memory-card/MemoryCard"
+import type { MemoryWithMedia } from "@/lib/types"
 
 type Props = {
   params: Promise<{ year: string }>
@@ -17,18 +12,16 @@ type Props = {
 async function getYearData(year: number) {
   const supabase = await createClient()
 
-  const startDate = `${year}-01-01`
-  const endDate = `${year}-12-31`
-
   const { data, error } = await supabase
     .from("memories")
-    .select("id, title, description, memory_date, country_name")
-    .gte("memory_date", startDate)
-    .lte("memory_date", endDate)
+    .select("*, media_files(*)")
+    .gte("memory_date", `${year}-01-01`)
+    .lte("memory_date", `${year}-12-31`)
     .order("memory_date", { ascending: true })
+    .order("position", { ascending: true, referencedTable: "media_files" })
 
   if (error) return null
-  return (data ?? []) as MemoryPreview[]
+  return (data ?? []) as MemoryWithMedia[]
 }
 
 async function getAdjacentYears(year: number) {
@@ -119,7 +112,7 @@ export default async function YearPage({ params }: Props) {
         </div>
       </div>
 
-      {/* Memories grid */}
+      {/* Memories masonry grid */}
       {memories.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 gap-3 text-center">
           <p className="text-[#888888]">Pas encore de souvenirs pour {year}.</p>
@@ -131,47 +124,11 @@ export default async function YearPage({ params }: Props) {
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
           {memories.map((memory) => (
-            <Link
-              key={memory.id}
-              href={`/memories/${memory.id}`}
-              className="group rounded-2xl bg-white border border-black/5 p-5 shadow-[0_4px_24px_rgba(0,0,0,0.06)] flex flex-col gap-3 hover:shadow-[0_4px_32px_rgba(201,116,138,0.18)] transition-shadow duration-200"
-            >
-              {/* Type badge */}
-              <span className="text-[10px] uppercase tracking-widest text-[#C9748A] font-medium">
-                souvenir
-              </span>
-
-              {/* Title */}
-              <h2
-                className="text-base font-medium text-[#1A1A1A] leading-snug group-hover:text-[#C9748A] transition-colors line-clamp-2"
-                style={{ fontFamily: "var(--font-playfair)" }}
-              >
-                {memory.title}
-              </h2>
-
-              {/* Description excerpt */}
-              {memory.description && (
-                <p className="text-sm text-[#888888] leading-relaxed line-clamp-3">
-                  {memory.description}
-                </p>
-              )}
-
-              {/* Meta */}
-              <div className="flex items-center gap-3 mt-auto pt-2 flex-wrap">
-                <span className="flex items-center gap-1 text-xs text-[#AAAAAA]">
-                  <Calendar size={11} />
-                  {formatMemoryDate(memory.memory_date)}
-                </span>
-                {memory.country_name && (
-                  <span className="flex items-center gap-1 text-xs text-[#AAAAAA]">
-                    <MapPin size={11} />
-                    {memory.country_name}
-                  </span>
-                )}
-              </div>
-            </Link>
+            <div key={memory.id} className="mb-4 break-inside-avoid">
+              <MemoryCard memory={memory} />
+            </div>
           ))}
         </div>
       )}
