@@ -10,6 +10,20 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/memories/new",
+        destination: "/memory/new",
+        permanent: false,
+      },
+      {
+        source: "/memories/:id",
+        destination: "/memory/:id",
+        permanent: false,
+      },
+    ]
+  },
 };
 
 export default nextConfig;
