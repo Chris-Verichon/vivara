@@ -13,6 +13,17 @@ Versioning: [Semantic Versioning](https://semver.org/)
 ## [Unreleased]
 
 ---
+## [0.7.0] — 2026-05-07
+
+### Added
+- `components/memory-card/MemoryCard.tsx` — reusable memory card with 3 variants (photo, video, text), Framer Motion hover animation, country badge, tag badges, date in French
+- `components/memory-card/MemoryCardSkeleton.tsx` — skeleton card and `MemoryCardSkeletonGrid` for loading states
+
+### Changed
+- `app/(app)/timeline/[year]/page.tsx` — replaced custom card grid with `MemoryCard` in a CSS masonry layout; query now fetches `media_files` for each memory
+- `package.json` version bumped to `0.7.0`
+
+---
 ## [0.6.0] — 2026-05-07
 
 ### Added
