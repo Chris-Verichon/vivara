@@ -13,6 +13,20 @@ Versioning: [Semantic Versioning](https://semver.org/)
 ## [Unreleased]
 
 ---
+## [0.6.0] — 2026-05-07
+
+### Added
+- `components/timeline/RopeTimeline.tsx` — canvas-based animated timeline with Foundation/dystopian aesthetic: continuous gold rope (trunk + 4 helical filaments), knots rendered as a rotating entangled ball of filaments (24 crossing lines) with asymmetric outer burst rays, zoom/pan/hover/click interactions, freeze zone on hover
+- `app/(app)/timeline/page.tsx` — timeline page rewritten to use `RopeTimeline`; fetches `memories.memory_date` + `site_config` (`birth_year` key) to build year nodes
+- `app/(app)/timeline/[year]/page.tsx` — year detail page listing memories for a given year
+
+### Removed
+- `components/timeline/TimelinePath.tsx` — old SVG timeline replaced by `RopeTimeline`
+
+### Changed
+- `package.json` version bumped to `0.6.0`
+
+---
 ## [0.5.0] — 2026-05-07
 
 ### Added
