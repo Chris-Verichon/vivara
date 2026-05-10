@@ -5,9 +5,25 @@ All notable changes to Vivàra are documented in this file.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 Versioning: [Semantic Versioning](https://semver.org/)
 
-> **Roadmap**
-> `0.1.0` Project setup → `0.2.0` Supabase → `0.3.0` Auth & UI shell → `0.4.0` Home animation → `0.5.0` Timeline → `0.6.0` Memory CRUD → `0.7.0` Gallery → `0.8.0` World map → `0.9.0` Mobile & config → **`1.0.0` Production release**
+---
 
+## [Unreleased]
+
+---
+
+## [0.10.0] — 2026-05-10
+### Added
+- `actions/memories.ts` — `updateMemory` server action (updates record, removes deleted media from Storage + DB, inserts new media_files)
+- `actions/memories.ts` — `deleteMemory` server action (removes all media from Storage, cascades DB delete, redirects to year page)
+- `components/memory-card/EditMemoryForm.tsx` — pre-populated edit form with existing media management and new upload support
+- `components/memory-card/DeleteMemoryButton.tsx` — client component with confirmation dialog
+- `app/(app)/memory/[id]/edit/page.tsx` — edit page (server wrapper + EditMemoryForm)
+- `components/memory-card/MemoryStoryRow.tsx` — alternating story layout (zigzag media/text) with scroll animations
+### Changed
+- `app/(app)/memory/[id]/page.tsx` — added Delete button alongside Edit link
+- `app/(app)/timeline/[year]/page.tsx` — replaced masonry grid with MemoryStoryRow story layout (zigzag, animated on scroll)
+
+---
 ## [0.9.0] — 2026-05-07
 ### Added
 - `components/lightbox/Lightbox.tsx` — fullscreen overlay with keyboard navigation (←/→/Escape), backdrop close, react-player for video
@@ -16,10 +32,6 @@ Versioning: [Semantic Versioning](https://semver.org/)
 ### Fixed
 - `lib/types.ts` — converted `Memory`, `MediaFile`, `SiteConfig` from `interface` to `type` so they satisfy Supabase SDK `GenericSchema` constraint (fixes `never[]` insert type errors)
 - `app/(app)/timeline/[year]/page.tsx` and `app/(app)/memory/[id]/page.tsx` — use `as unknown as MemoryWithMedia` for Supabase join cast
-
----
-
-## [Unreleased]
 
 ---
 ## [0.8.0] — 2026-05-07
