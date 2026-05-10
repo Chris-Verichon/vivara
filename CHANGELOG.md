@@ -11,6 +11,13 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [0.11.0] — 2026-05-10
+### Added
+- `app/(app)/gallery/page.tsx` — server component fetching all memories with media, derives year + country filter options
+- `components/gallery/GalleryClient.tsx` — client component with filter bar (type, year, country), sort (recent/oldest/random), masonry grid and "Load more" pagination (12 per page)
+
+---
+
 ## [0.10.0] — 2026-05-10
 ### Added
 - `actions/memories.ts` — `updateMemory` server action (updates record, removes deleted media from Storage + DB, inserts new media_files)
