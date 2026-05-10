@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ArrowLeft, ArrowRight, Plus } from "lucide-react"
-import { MemoryCard } from "@/components/memory-card/MemoryCard"
+import { MemoryStoryRow } from "@/components/memory-card/MemoryStoryRow"
 import type { MemoryWithMedia } from "@/lib/types"
 
 type Props = {
@@ -112,7 +112,7 @@ export default async function YearPage({ params }: Props) {
         </div>
       </div>
 
-      {/* Memories masonry grid */}
+      {/* Memories story layout */}
       {memories.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 gap-3 text-center">
           <p className="text-[#888888]">Pas encore de souvenirs pour {year}.</p>
@@ -124,10 +124,17 @@ export default async function YearPage({ params }: Props) {
           </Link>
         </div>
       ) : (
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
-          {memories.map((memory) => (
-            <div key={memory.id} className="mb-4 break-inside-avoid">
-              <MemoryCard memory={memory} />
+        <div className="flex flex-col gap-0">
+          {memories.map((memory, i) => (
+            <div key={memory.id}>
+              <MemoryStoryRow memory={memory} index={i} />
+              {i < memories.length - 1 && (
+                <div className="flex items-center gap-4 my-12 px-2">
+                  <div className="flex-1 h-px bg-[#F4B8C1]/40" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#F4B8C1]" />
+                  <div className="flex-1 h-px bg-[#F4B8C1]/40" />
+                </div>
+              )}
             </div>
           ))}
         </div>
