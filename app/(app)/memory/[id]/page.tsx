@@ -5,6 +5,7 @@ import { ArrowLeft, Pencil, MapPin, Calendar, Tag } from "lucide-react"
 import { formatMemoryDate } from "@/lib/utils"
 import type { MemoryWithMedia } from "@/lib/types"
 import { MemoryMediaGallery } from "@/components/memory-card/MemoryMediaGallery"
+import { DeleteMemoryButton } from "@/components/memory-card/DeleteMemoryButton"
 
 type Props = { params: Promise<{ id: string }> }
 
@@ -39,13 +40,16 @@ export default async function MemoryDetailPage({ params }: Props) {
           <ArrowLeft size={15} />
           {year}
         </Link>
-        <Link
-          href={`/memory/${memory.id}/edit`}
-          className="flex items-center gap-1.5 text-sm text-[#888888] hover:text-[#C9748A] transition-colors px-3 py-1.5 rounded-xl hover:bg-[#F4B8C1]/10"
-        >
-          <Pencil size={14} />
-          Modifier
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/memory/${memory.id}/edit`}
+            className="flex items-center gap-1.5 text-sm text-[#888888] hover:text-[#C9748A] transition-colors px-3 py-1.5 rounded-xl hover:bg-[#F4B8C1]/10"
+          >
+            <Pencil size={14} />
+            Modifier
+          </Link>
+          <DeleteMemoryButton memoryId={memory.id} />
+        </div>
       </div>
 
       {/* Header */}
