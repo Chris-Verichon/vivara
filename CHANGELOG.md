@@ -11,6 +11,17 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [0.12.0] — 2026-05-10
+### Added
+- `public/world-110m.json` — Natural Earth 110m TopoJSON world atlas
+- `lib/iso-countries.ts` — ISO 3166-1 alpha-2 → numeric lookup table (for react-simple-maps)
+- `types/react-simple-maps.d.ts` — TypeScript declarations for react-simple-maps v3
+- `components/world-map/WorldMap.tsx` — interactive world map (react-simple-maps), highlighted countries with memory bubbles, zoom controls, hover tooltips, click to open drawer
+- `components/world-map/CountryDrawer.tsx` — side drawer listing memories for a selected country, filterable by year
+- `app/(app)/world/page.tsx` — world map page with server-side data fetch grouped by country
+
+---
+
 ## [0.11.0] — 2026-05-10
 ### Added
 - `app/(app)/gallery/page.tsx` — server component fetching all memories with media, derives year + country filter options
