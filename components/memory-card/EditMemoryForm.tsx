@@ -257,23 +257,23 @@ export function EditMemoryForm({ memory }: Props) {
     <div className="max-w-2xl mx-auto px-6 py-12 flex flex-col gap-8">
       <Link
         href={`/memory/${memory.id}`}
-        className="flex items-center gap-1.5 text-sm text-[#888888] hover:text-[#C9748A] transition-colors w-fit"
+        className="flex items-center gap-1.5 text-sm text-[#fdf6ec]/60 hover:text-[#F4B8C1] transition-colors w-fit"
       >
         <ArrowLeft size={15} />
         Retour
       </Link>
 
       <div>
-        <h1 className="text-3xl text-[#1A1A1A]" style={{ fontFamily: "var(--font-playfair)" }}>
+        <h1 className="text-3xl text-[#fdf6ec]" style={{ fontFamily: "var(--font-playfair)" }}>
           Modifier le souvenir
         </h1>
-        <p className="text-sm text-[#888888] mt-1">{year}</p>
+        <p className="text-sm text-[#fdf6ec]/55 mt-1">{year}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         {/* Title */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-[#1A1A1A]">Titre *</label>
+          <label className="text-sm font-medium text-[#fdf6ec]/85">Titre *</label>
           <input
             type="text"
             value={title}
@@ -285,7 +285,7 @@ export function EditMemoryForm({ memory }: Props) {
 
         {/* Date */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-[#1A1A1A]">Date *</label>
+          <label className="text-sm font-medium text-[#fdf6ec]/85">Date *</label>
           <input
             type="date"
             value={date}
@@ -297,7 +297,7 @@ export function EditMemoryForm({ memory }: Props) {
 
         {/* Description */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-[#1A1A1A]">Description</label>
+          <label className="text-sm font-medium text-[#fdf6ec]/85">Description</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -308,7 +308,7 @@ export function EditMemoryForm({ memory }: Props) {
 
         {/* Country */}
         <div className="flex flex-col gap-1.5 relative">
-          <label className="text-sm font-medium text-[#1A1A1A]">Pays</label>
+          <label className="text-sm font-medium text-[#fdf6ec]/85">Pays</label>
           <div className="relative">
             <input
               type="text"
@@ -348,7 +348,7 @@ export function EditMemoryForm({ memory }: Props) {
 
         {/* Tags */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-[#1A1A1A]">Tags</label>
+          <label className="text-sm font-medium text-[#fdf6ec]/85">Tags</label>
           <div className="flex gap-2">
             <input
               type="text"
@@ -361,7 +361,7 @@ export function EditMemoryForm({ memory }: Props) {
             <button
               type="button"
               onClick={addTag}
-              className="px-4 py-2.5 rounded-xl bg-[#FAF7F2] text-sm text-[#888888] hover:text-[#C9748A] border border-black/10 transition-colors"
+              className="px-4 py-2.5 rounded-xl bg-white/5 text-sm text-[#fdf6ec]/70 hover:text-[#F4B8C1] border border-white/15 transition-colors"
             >
               Ajouter
             </button>
@@ -381,7 +381,7 @@ export function EditMemoryForm({ memory }: Props) {
         {/* Existing media */}
         {existingMedia.length > 0 && (
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-[#1A1A1A]">Médias existants</label>
+            <label className="text-sm font-medium text-[#fdf6ec]/85">Médias existants</label>
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
               {existingMedia.map((m) => (
                 <div key={m.id} className="relative group aspect-square rounded-xl overflow-hidden bg-[#F5F0EA]">
@@ -403,7 +403,7 @@ export function EditMemoryForm({ memory }: Props) {
 
         {/* New media upload */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-[#1A1A1A]">Ajouter des médias</label>
+          <label className="text-sm font-medium text-[#fdf6ec]/85">Ajouter des médias</label>
           <DropZone files={newFiles} onChange={setNewFiles} />
         </div>
 
@@ -421,7 +421,7 @@ export function EditMemoryForm({ memory }: Props) {
           </button>
           <Link
             href={`/memory/${memory.id}`}
-            className="px-5 py-3 rounded-xl border border-black/10 text-sm text-[#888888] hover:text-[#1A1A1A] transition-colors"
+            className="px-5 py-3 rounded-xl border border-white/15 text-sm text-[#fdf6ec]/60 hover:text-[#fdf6ec] transition-colors"
           >
             Annuler
           </Link>

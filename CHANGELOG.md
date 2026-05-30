@@ -11,6 +11,31 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [0.15.0] — 2026-05-30
+### Added
+- **Nocturnal restyle (all pages)** — deep night palette (`#0b0a14`, `#060510`), rose atmosphere, Playfair Display headings; `app/globals.css` extended with night-mode custom properties and a global `night-gradient` class
+- `lib/device.ts` — `DeviceTier` type + `useDeviceTier()` hook (WebGL benchmark → `"high" | "low" | "none"`)
+- `components/three/SceneCanvas.tsx` — shared `<Canvas>` wrapper (bloom post-processing, tone-mapping, adaptive DPR per tier)
+- `components/three/Starfield.tsx` — instanced star field (count driven by tier tuning)
+- `components/three/constellation.ts` — shared nocturnal design tokens (`NIGHT_COLORS`) and `getSceneTuning(tier)` helper
+- `components/home/` — `ConstellationHome.tsx` (immersive R3F hero replacing `FlowerHero`), `HomeWorld.tsx` wrapper with WebGL detection
+- `components/timeline/ConstellationTimeline.tsx` — immersive 3D timeline: `CatmullRomCurve3` braided «fil de vie», `MemoryStar` nodes, `Billboard` year labels, `ScrollControls` camera, `DriftParticles`, `BraidFlow` flowing-light flux (animated emissive spheres along braid strands)
+- `components/world-map/Globe3D.tsx` — nocturnal interactive 3D globe (three-globe v2, OrbitControls, auto-rotate); every country rendered via earcut polygon layer (no h3-js, crash-free); countries with memories filled in rose and clickable; WebGL-adaptive DPR
+- `components/world-map/GlobeWorld.tsx` — WebGL-detect wrapper: renders Globe3D or falls back to 2D WorldMap; manages `CountryDrawer` for selected country
+- `lib/centroids.ts` — ISO alpha-2 → `[lon, lat]` centroid lookup (~150 countries)
+- `public/videos/README.txt` — placeholder for ambient video assets
+### Changed
+- All app pages restyled to nocturnal palette (home, timeline, world, gallery, memory, settings)
+- `app/(app)/world/page.tsx` — now renders `GlobeWorld` instead of `WorldMap`; data shape extended with centroid field
+- `app/(app)/timeline/page.tsx` + `timeline/[year]/page.tsx` — feed `ConstellationTimeline`
+- `app/(app)/page.tsx` — renders `ConstellationHome`
+- `app/layout.tsx` — `suppressHydrationWarning` on `<body>` (suppresses browser-extension attribute injection)
+- `package.json` — added deps: `three`, `@react-three/fiber`, `@react-three/drei`, `@react-three/postprocessing`, `three-globe`, `topojson-client`, `topojson-specification`, `@types/geojson`, `@types/topojson-client`, `@types/topojson-specification`
+### Fixed
+- h3-js `polygonToCells` runtime crash (antimeridian-crossing and pole-wrapping countries such as Antarctica, Fiji, Russia) — replaced three-globe's hex polygon layer entirely with an earcut polygon layer which never crashes
+
+---
+
 ## [0.14.0] — 2026-05-30
 ### Added
 - `actions/site-config.ts` — `getSiteConfig` (server) + `updateSiteConfig` (server action) with key-allowlist for `welcome_message`, `owner_name`, `quote`, `birth_year`; upserts into `site_config` table, revalidates `/`, `/settings` and `/timeline`

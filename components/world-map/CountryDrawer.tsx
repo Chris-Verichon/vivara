@@ -37,30 +37,30 @@ export function CountryDrawer({ countryName, memories, onClose }: Props) {
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/30 z-40 md:hidden"
+        className="fixed inset-0 bg-black/50 z-40 md:hidden"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Drawer panel */}
-      <aside className="fixed bottom-0 left-0 right-0 md:right-0 md:left-auto md:top-0 md:bottom-0 md:w-96 z-50 flex flex-col bg-[#FAF7F2] shadow-2xl rounded-t-2xl md:rounded-none overflow-hidden">
+      <aside className="fixed bottom-0 left-0 right-0 md:right-0 md:left-auto md:top-0 md:bottom-0 md:w-96 z-50 flex flex-col bg-[#0b0a14]/95 backdrop-blur-xl border-l border-white/10 shadow-2xl rounded-t-2xl md:rounded-none overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-black/8">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
           <div>
             <h2
-              className="text-xl text-[#1A1A1A]"
+              className="text-xl text-[#fdf6ec]"
               style={{ fontFamily: "var(--font-playfair)" }}
             >
               {countryName}
             </h2>
-            <p className="text-xs text-[#888888] mt-0.5">
+            <p className="text-xs text-[#fdf6ec]/55 mt-0.5">
               {memories.length} souvenir{memories.length > 1 ? "s" : ""}
             </p>
           </div>
           <button
             onClick={onClose}
             aria-label="Fermer"
-            className="p-2 rounded-xl hover:bg-black/5 transition-colors text-[#888888] hover:text-[#1A1A1A]"
+            className="p-2 rounded-xl hover:bg-white/10 transition-colors text-[#fdf6ec]/60 hover:text-[#fdf6ec]"
           >
             <X size={18} />
           </button>
@@ -68,13 +68,13 @@ export function CountryDrawer({ countryName, memories, onClose }: Props) {
 
         {/* Year filter */}
         {years.length > 1 && (
-          <div className="px-6 py-3 border-b border-black/8 flex items-center gap-2 flex-wrap">
+          <div className="px-6 py-3 border-b border-white/10 flex items-center gap-2 flex-wrap">
             <button
               onClick={() => setSelectedYear(null)}
               className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
                 selectedYear === null
                   ? "bg-[#C9748A] border-[#C9748A] text-white"
-                  : "border-black/10 text-[#888888] hover:border-[#C9748A] hover:text-[#C9748A]"
+                  : "border-white/15 text-[#fdf6ec]/60 hover:border-[#F4B8C1] hover:text-[#F4B8C1]"
               }`}
             >
               Tout
@@ -86,7 +86,7 @@ export function CountryDrawer({ countryName, memories, onClose }: Props) {
                 className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
                   selectedYear === year
                     ? "bg-[#C9748A] border-[#C9748A] text-white"
-                    : "border-black/10 text-[#888888] hover:border-[#C9748A] hover:text-[#C9748A]"
+                    : "border-white/15 text-[#fdf6ec]/60 hover:border-[#F4B8C1] hover:text-[#F4B8C1]"
                 }`}
               >
                 {year}
@@ -102,17 +102,17 @@ export function CountryDrawer({ countryName, memories, onClose }: Props) {
               key={memory.id}
               href={`/memory/${memory.id}`}
               onClick={onClose}
-              className="group flex flex-col gap-1 p-4 rounded-xl bg-white hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-shadow"
+              className="group flex flex-col gap-1 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
             >
-              <p className="text-xs text-[#888888]">{formatDate(memory.memory_date)}</p>
+              <p className="text-xs text-[#fdf6ec]/45">{formatDate(memory.memory_date)}</p>
               <h3
-                className="text-sm font-medium text-[#1A1A1A] group-hover:text-[#C9748A] transition-colors leading-snug"
+                className="text-sm font-medium text-[#fdf6ec] group-hover:text-[#F4B8C1] transition-colors leading-snug"
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
                 {memory.title}
               </h3>
               {memory.description && (
-                <p className="text-xs text-[#888888] line-clamp-2 leading-relaxed">
+                <p className="text-xs text-[#fdf6ec]/50 line-clamp-2 leading-relaxed">
                   {memory.description}
                 </p>
               )}

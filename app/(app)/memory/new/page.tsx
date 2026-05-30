@@ -226,25 +226,25 @@ export default function NewMemoryPage() {
       {/* Back */}
       <Link
         href={yearParam ? `/timeline/${yearParam}` : "/timeline"}
-        className="flex items-center gap-1.5 text-sm text-[#888888] hover:text-[#C9748A] transition-colors w-fit"
+        className="flex items-center gap-1.5 text-sm text-[#fdf6ec]/60 hover:text-[#F4B8C1] transition-colors w-fit"
       >
         <ArrowLeft size={15} />
         Retour
       </Link>
 
       <div>
-        <h1 className="text-3xl text-[#1A1A1A]" style={{ fontFamily: "var(--font-playfair)" }}>
+        <h1 className="text-3xl text-[#fdf6ec]" style={{ fontFamily: "var(--font-playfair)" }}>
           Nouveau souvenir
         </h1>
         {yearParam && (
-          <p className="text-sm text-[#888888] mt-1">{yearParam}</p>
+          <p className="text-sm text-[#fdf6ec]/55 mt-1">{yearParam}</p>
         )}
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         {/* Title */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-[#1A1A1A]">Titre *</label>
+          <label className="text-sm font-medium text-[#fdf6ec]/85">Titre *</label>
           <input
             type="text"
             value={title}
@@ -257,7 +257,7 @@ export default function NewMemoryPage() {
 
         {/* Date */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-[#1A1A1A]">Date *</label>
+          <label className="text-sm font-medium text-[#fdf6ec]/85">Date *</label>
           <input
             type="date"
             value={date}
@@ -269,7 +269,7 @@ export default function NewMemoryPage() {
 
         {/* Description */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-[#1A1A1A]">Description</label>
+          <label className="text-sm font-medium text-[#fdf6ec]/85">Description</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -281,7 +281,7 @@ export default function NewMemoryPage() {
 
         {/* Country */}
         <div className="flex flex-col gap-1.5 relative">
-          <label className="text-sm font-medium text-[#1A1A1A]">Pays</label>
+          <label className="text-sm font-medium text-[#fdf6ec]/85">Pays</label>
           <div className="relative">
             <input
               type="text"
@@ -325,7 +325,7 @@ export default function NewMemoryPage() {
 
         {/* Tags */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-[#1A1A1A]">Tags</label>
+          <label className="text-sm font-medium text-[#fdf6ec]/85">Tags</label>
           <div className="flex gap-2">
             <input
               type="text"
@@ -338,7 +338,7 @@ export default function NewMemoryPage() {
             <button
               type="button"
               onClick={addTag}
-              className="px-4 py-2.5 rounded-xl bg-[#FAF7F2] text-sm text-[#888888] hover:text-[#C9748A] border border-black/10 transition-colors"
+              className="px-4 py-2.5 rounded-xl bg-white/5 text-sm text-[#fdf6ec]/70 hover:text-[#F4B8C1] border border-white/15 transition-colors"
             >
               Ajouter
             </button>
@@ -362,7 +362,7 @@ export default function NewMemoryPage() {
 
         {/* Media upload */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-[#1A1A1A]">Photos &amp; vidéos</label>
+          <label className="text-sm font-medium text-[#fdf6ec]/85">Photos &amp; vidéos</label>
           <DropZone files={uploadFiles} onChange={setUploadFiles} />
         </div>
 
@@ -382,7 +382,7 @@ export default function NewMemoryPage() {
           </button>
           <Link
             href={yearParam ? `/timeline/${yearParam}` : "/timeline"}
-            className="px-5 py-3 rounded-xl border border-black/10 text-sm text-[#888888] hover:text-[#1A1A1A] transition-colors"
+            className="px-5 py-3 rounded-xl border border-white/15 text-sm text-[#fdf6ec]/60 hover:text-[#fdf6ec] transition-colors"
           >
             Annuler
           </Link>

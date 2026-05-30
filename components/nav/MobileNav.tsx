@@ -14,15 +14,15 @@ export function MobileNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-black/10 flex items-center justify-around px-2 pb-safe">
+    <nav className="pb-safe fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-white/10 bg-[#0b0a14]/80 px-2 backdrop-blur-md md:hidden">
       {NAV_ITEMS.map(({ href, Icon, label }) => {
         const active = pathname === href || pathname.startsWith(href + "/")
         return (
           <Link
             key={href}
             href={href}
-            className={`flex flex-col items-center gap-0.5 px-4 py-3 rounded-xl transition-colors ${
-              active ? "text-[#C9748A]" : "text-[#888888] hover:text-[#C9748A]"
+            className={`flex flex-col items-center gap-0.5 rounded-xl px-4 py-3 transition-colors ${
+              active ? "text-[#F4B8C1]" : "text-[#fdf6ec]/60 hover:text-[#F4B8C1]"
             }`}
           >
             <Icon size={22} strokeWidth={active ? 2.2 : 1.8} />
@@ -34,10 +34,10 @@ export function MobileNav() {
       {/* Add memory — prominent CTA */}
       <Link
         href="/memory/new"
-        className="flex flex-col items-center gap-0.5 px-4 py-3 rounded-xl text-[#C9748A] transition-colors hover:text-[#b5637a]"
+        className="flex flex-col items-center gap-0.5 rounded-xl px-4 py-3 text-[#F4B8C1] transition-colors hover:text-[#e89aa9]"
         aria-label="Ajouter un souvenir"
       >
-        <div className="w-9 h-9 rounded-full bg-[#C9748A] flex items-center justify-center shadow-md hover:bg-[#b5637a] transition-colors -mt-4">
+        <div className="-mt-4 flex h-9 w-9 items-center justify-center rounded-full bg-[#C9748A] shadow-md transition-colors hover:bg-[#b5637a]">
           <Plus size={20} className="text-white" strokeWidth={2.5} />
         </div>
         <span className="text-[10px] font-medium">Ajouter</span>
