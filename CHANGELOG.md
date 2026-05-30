@@ -11,6 +11,20 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [0.14.0] — 2026-05-30
+### Added
+- `actions/site-config.ts` — `getSiteConfig` (server) + `updateSiteConfig` (server action) with key-allowlist for `welcome_message`, `owner_name`, `quote`, `birth_year`; upserts into `site_config` table, revalidates `/`, `/settings` and `/timeline`
+- `components/settings/SettingsForm.tsx` — client form using `useActionState`; fields for owner name, birth year (1900–current), welcome message and quote; success/error feedback, rose CTA button
+- `app/(app)/settings/page.tsx` — settings page (server component) fetching current config and rendering `SettingsForm`
+- `supabase/migrations/004_site_config_insert_policy.sql` — INSERT RLS policy for `site_config` table (required for upsert)
+- `app/(app)/timeline/page.tsx` — reads `birth_year` from site config to set timeline start year
+- **Timeline — Prime Radiant particle system**: 200 drifting network particles (4 colour types: steel blue, lavender, amber, rose), holographic connection lines, 3-layer glow per node, cross sparkle on bright nodes
+- **Timeline — mouse interactivity**: particles repel from cursor (160 px field), tendril lines reach toward cursor, pulsing rose orb glow follows mouse
+- **Timeline — scrollbar + zoom**: horizontal drag scrollbar; zoom clamped 0.35–3×
+- **Timeline — linen background**: site design token `#FAF7F2`; initial view focused on the most recent years
+
+---
+
 ## [0.13.0] — 2026-05-10
 ### Added
 - `components/nav/MobileNav.tsx` — mobile bottom tab bar (fixed, `md:hidden`) with 4 items: Timeline, Monde, Galerie, + Ajouter (prominent rose CTA); active route highlighting via `usePathname`
