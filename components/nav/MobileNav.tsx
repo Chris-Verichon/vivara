@@ -1,102 +1,47 @@
 "use client"
 
-import { useState } from "react"
 import Link from "next/link"
-import { Menu, X, Clock, Globe, ImageIcon, Settings } from "lucide-react"
-import { signOut } from "@/actions/auth"
+import { usePathname } from "next/navigation"
+import { Clock, Globe, ImageIcon, Plus } from "lucide-react"
 
-const NAV_LINKS = [
+const NAV_ITEMS = [
   { href: "/timeline", Icon: Clock, label: "Timeline" },
-  { href: "/world", Icon: Globe, label: "World" },
-  { href: "/gallery", Icon: ImageIcon, label: "Gallery" },
+  { href: "/world", Icon: Globe, label: "Monde" },
+  { href: "/gallery", Icon: ImageIcon, label: "Galerie" },
 ]
 
 export function MobileNav() {
-  const [open, setOpen] = useState(false)
+  const pathname = usePathname()
 
   return (
-    <>
-      {/* Burger button */}
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="md:hidden flex items-center justify-center w-9 h-9 rounded-lg text-[#888888] hover:text-[#C9748A] hover:bg-black/5 transition-colors"
-        aria-label="Menu"
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-black/10 flex items-center justify-around px-2 pb-safe">
+      {NAV_ITEMS.map(({ href, Icon, label }) => {
+        const active = pathname === href || pathname.startsWith(href + "/")
+        return (
+          <Link
+            key={href}
+            href={href}
+            className={`flex flex-col items-center gap-0.5 px-4 py-3 rounded-xl transition-colors ${
+              active ? "text-[#C9748A]" : "text-[#888888] hover:text-[#C9748A]"
+            }`}
+          >
+            <Icon size={22} strokeWidth={active ? 2.2 : 1.8} />
+            <span className="text-[10px] font-medium">{label}</span>
+          </Link>
+        )
+      })}
+
+      {/* Add memory — prominent CTA */}
+      <Link
+        href="/memory/new"
+        className="flex flex-col items-center gap-0.5 px-4 py-3 rounded-xl text-[#C9748A] transition-colors hover:text-[#b5637a]"
+        aria-label="Ajouter un souvenir"
       >
-        {open ? <X size={20} /> : <Menu size={20} />}
-      </button>
-
-      {/* Fullscreen overlay menu */}
-      {open && (
-        <>
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
-            onClick={() => setOpen(false)}
-          />
-
-          {/* Drawer — slides in from top */}
-          <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-black/10 shadow-lg px-6 pt-5 pb-6 flex flex-col gap-6">
-            {/* Header row */}
-            <div className="flex items-center justify-between">
-              <Link
-                href="/"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-2"
-              >
-                <span className="text-xl select-none">🌻</span>
-                <span
-                  className="text-xl text-[#C9748A]"
-                  style={{ fontFamily: "var(--font-playfair)" }}
-                >
-                  Vivàra
-                </span>
-              </Link>
-              <button
-                onClick={() => setOpen(false)}
-                className="flex items-center justify-center w-9 h-9 rounded-lg text-[#888888] hover:text-[#C9748A] hover:bg-black/5 transition-colors"
-                aria-label="Fermer"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            {/* Nav links */}
-            <nav className="flex flex-col gap-1">
-              {NAV_LINKS.map(({ href, Icon, label }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  onClick={() => setOpen(false)}
-                  className="flex items-center gap-3 px-3 py-3 rounded-xl text-[#1A1A1A] hover:bg-[#F4B8C1]/15 hover:text-[#C9748A] transition-colors"
-                >
-                  <Icon size={18} className="text-[#C9748A]" />
-                  <span className="text-base">{label}</span>
-                </Link>
-              ))}
-            </nav>
-
-            {/* Bottom actions */}
-            <div className="flex items-center justify-between pt-2 border-t border-black/5">
-              <Link
-                href="/settings"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-2 text-sm text-[#888888] hover:text-[#C9748A] transition-colors"
-              >
-                <Settings size={16} />
-                Paramètres
-              </Link>
-              <form action={signOut}>
-                <button
-                  type="submit"
-                  className="text-sm text-[#888888] hover:text-[#C9748A] transition-colors"
-                >
-                  Déconnexion
-                </button>
-              </form>
-            </div>
-          </div>
-        </>
-      )}
-    </>
+        <div className="w-9 h-9 rounded-full bg-[#C9748A] flex items-center justify-center shadow-md hover:bg-[#b5637a] transition-colors -mt-4">
+          <Plus size={20} className="text-white" strokeWidth={2.5} />
+        </div>
+        <span className="text-[10px] font-medium">Ajouter</span>
+      </Link>
+    </nav>
   )
 }
