@@ -12,6 +12,21 @@ interface RopeTimelineProps {
   nodes: YearNode[]
 }
 
+interface StarParticle {
+  cx: number          // base content-space x
+  cyFrac: number      // base y as fraction of canvas height
+  driftAmpX: number   // x drift amplitude (content px)
+  driftAmpY: number   // y drift amplitude (screen px)
+  driftPhaseX: number
+  driftPhaseY: number
+  driftSpeed: number
+  r: number           // base radius (screen px / zoom)
+  phase: number       // pulse phase
+  speed: number       // pulse speed
+  colorType: number   // 0=cyan | 1=cobalt | 2=gold | 3=rose
+  layer: number       // 0 = behind rope | 1 = in front
+}
+
 // Smoothstep blend — 0 at center, 1 at edge
 function smoothstep(t: number) {
   const x = Math.min(1, Math.max(0, t))
@@ -29,6 +44,14 @@ export function RopeTimeline({ nodes }: RopeTimelineProps) {
   const isDraggingRef = useRef(false)
   const dragStartXRef = useRef(0)
   const dragStartPanRef = useRef(0)
+  const scrollbarThumbRef = useRef<HTMLDivElement>(null)
+  const scrollbarTrackRef = useRef<HTMLDivElement>(null)
+  const isScrollbarDraggingRef = useRef(false)
+  const scrollbarDragStartXRef = useRef(0)
+  const scrollbarDragStartPanRef = useRef(0)
+  const scrollbarDragThumbWidthRef = useRef(0)
+  const mousePosRef = useRef<{ x: number; y: number } | null>(null)
+  const starsRef = useRef<StarParticle[]>([])
   const [contextMenu, setContextMenu] = useState<{
     x: number
     y: number
@@ -84,7 +107,28 @@ export function RopeTimeline({ nodes }: RopeTimelineProps) {
     window.addEventListener("resize", resize)
 
     const totalWidth = nodes.length * KNOT_SPACING
-    panXRef.current = (canvas.offsetWidth - totalWidth * zoomRef.current) / 2
+    // Focus view on the most recent years (right end of timeline)
+    panXRef.current = canvas.offsetWidth * 0.75 - (totalWidth - KNOT_SPACING * 0.5) * zoomRef.current
+
+    // ── Prime Radiant particles ─────────────────────────────────
+    const bell = () => (Math.random() + Math.random()) / 2
+    starsRef.current = Array.from({ length: 200 }, () => {
+      const ct = Math.random()
+      return {
+        cx: -totalWidth * 0.05 + Math.random() * totalWidth * 1.10,
+        cyFrac: 0.05 + bell() * 0.90,
+        driftAmpX: 10 + Math.random() * 25,
+        driftAmpY: 8 + Math.random() * 20,
+        driftPhaseX: Math.random() * Math.PI * 2,
+        driftPhaseY: Math.random() * Math.PI * 2,
+        driftSpeed: 0.35 + Math.random() * 0.75,
+        r: 0.35 + Math.random() ** 1.3 * 2.6,
+        phase: Math.random() * Math.PI * 2,
+        speed: 0.30 + Math.random() * 1.4,
+        colorType: ct < 0.38 ? 0 : ct < 0.62 ? 1 : ct < 0.84 ? 2 : 3,
+        layer: Math.random() < 0.28 ? 1 : 0,
+      }
+    })
 
     const draw = (timestamp: number) => {
       const t = timestamp * 0.001
@@ -94,7 +138,14 @@ export function RopeTimeline({ nodes }: RopeTimelineProps) {
       const H = canvas.offsetHeight
 
       ctx.clearRect(0, 0, W, H)
-      ctx.fillStyle = "#FFFFFF"
+      // Linen background — site design token
+      ctx.fillStyle = "#FAF7F2"
+      ctx.fillRect(0, 0, W, H)
+      // Warm edge vignette
+      const vigG = ctx.createRadialGradient(W * 0.5, H * 0.5, H * 0.15, W * 0.5, H * 0.5, H * 0.95)
+      vigG.addColorStop(0, "rgba(0,0,0,0)")
+      vigG.addColorStop(1, "rgba(165,140,110,0.18)")
+      ctx.fillStyle = vigG
       ctx.fillRect(0, 0, W, H)
 
       ctx.save()
@@ -106,6 +157,138 @@ export function RopeTimeline({ nodes }: RopeTimelineProps) {
         ? nodes.findIndex((n) => n.year === hoveredYearRef.current)
         : null
       const knotXs = nodes.map((_, i) => (i + 0.5) * KNOT_SPACING)
+
+      // ── Prime Radiant: drifting network particles ─────────────────
+      const drawStars = (layer: number) => {
+        const pts: { cx: number; cy: number; alpha: number; size: number; colorType: number; r: number }[] = []
+
+        for (const star of starsRef.current) {
+          if (star.layer !== layer) continue
+          const driftX = star.driftAmpX * Math.sin(t * star.driftSpeed * 0.18 + star.driftPhaseX)
+          const driftY = star.driftAmpY * Math.cos(t * star.driftSpeed * 0.14 + star.driftPhaseY)
+          const flicker = 0.30 + 0.70 * Math.abs(Math.sin(t * star.speed + star.phase))
+          let finalCx = star.cx + driftX
+          let finalCy = star.cyFrac * H + driftY
+
+          // Mouse repulsion field — particles flee the cursor
+          const mouseRep = mousePosRef.current
+          if (mouseRep) {
+            const sx = finalCx * zoomRef.current + panXRef.current
+            const sy = finalCy
+            const mdx = sx - mouseRep.x
+            const mdy = sy - mouseRep.y
+            const mdist = Math.sqrt(mdx * mdx + mdy * mdy)
+            const REPULSE_R = 160
+            if (mdist < REPULSE_R && mdist > 0) {
+              const force = ((REPULSE_R - mdist) / REPULSE_R) ** 2
+              const MAX_OFFSET = 85
+              finalCx += (mdx / mdist * force * MAX_OFFSET) / zoomRef.current
+              finalCy += mdy / mdist * force * MAX_OFFSET
+            }
+          }
+
+          pts.push({
+            cx: finalCx,
+            cy: finalCy,
+            alpha: flicker,
+            size: star.r * flicker,
+            colorType: star.colorType,
+            r: star.r,
+          })
+        }
+
+        // Holographic connection lines
+        const THRESH = 90
+        for (let i = 0; i < pts.length; i++) {
+          for (let j = i + 1; j < pts.length; j++) {
+            const dx = pts[i].cx - pts[j].cx
+            const dy = pts[i].cy - pts[j].cy
+            const sd = Math.sqrt((dx * zoomRef.current) ** 2 + dy * dy)
+            if (sd > THRESH) continue
+            const la = (1 - sd / THRESH) * 0.22
+            ctx.beginPath()
+            ctx.moveTo(pts[i].cx, pts[i].cy)
+            ctx.lineTo(pts[j].cx, pts[j].cy)
+            ctx.strokeStyle = `rgba(155,130,110,${la.toFixed(3)})`
+            ctx.lineWidth = 0.55 / zoomRef.current
+            ctx.lineCap = "butt"
+            ctx.stroke()
+          }
+        }
+
+        // Cursor tendril connections — particles reach toward the mouse
+        const mouseTend = mousePosRef.current
+        if (mouseTend) {
+          const cursorCX = (mouseTend.x - panXRef.current) / zoomRef.current
+          const cursorCY = mouseTend.y
+          const CURSOR_R = 155
+          for (const p of pts) {
+            const tdx = (p.cx - cursorCX) * zoomRef.current
+            const tdy = p.cy - cursorCY
+            const sd = Math.sqrt(tdx * tdx + tdy * tdy)
+            if (sd > CURSOR_R) continue
+            const la = (1 - sd / CURSOR_R) * 0.55
+            ctx.beginPath()
+            ctx.moveTo(p.cx, p.cy)
+            ctx.lineTo(cursorCX, cursorCY)
+            ctx.strokeStyle = `rgba(196,116,138,${la.toFixed(3)})`
+            ctx.lineWidth = 0.75 / zoomRef.current
+            ctx.lineCap = "round"
+            ctx.stroke()
+          }
+        }
+
+        // Particle nodes
+        for (const p of pts) {
+          const a = p.alpha
+          const sz = p.size / zoomRef.current
+          const palettes: [string, string, string][] = [
+            [`rgba(72,128,195,${a.toFixed(2)})`,           `rgba(52,98,168,${(a*0.20).toFixed(2)})`,    `rgba(62,113,182,${(a*0.34).toFixed(2)})`],
+            [`rgba(122,98,195,${a.toFixed(2)})`,           `rgba(92,70,170,${(a*0.18).toFixed(2)})`,    `rgba(107,84,183,${(a*0.30).toFixed(2)})`],
+            [`rgba(192,145,40,${a.toFixed(2)})`,           `rgba(162,115,20,${(a*0.20).toFixed(2)})`,   `rgba(178,130,32,${(a*0.34).toFixed(2)})`],
+            [`rgba(196,116,138,${(a*0.92).toFixed(2)})`,   `rgba(162,80,112,${(a*0.17).toFixed(2)})`,   `rgba(180,98,125,${(a*0.30).toFixed(2)})`],
+          ]
+          const pal = palettes[p.colorType % 4]
+          const [core, outerH, innerH] = pal
+
+          // Outer diffuse halo
+          ctx.beginPath()
+          ctx.arc(p.cx, p.cy, sz * 3.8, 0, Math.PI * 2)
+          ctx.fillStyle = outerH
+          ctx.fill()
+
+          // Mid glow
+          ctx.beginPath()
+          ctx.arc(p.cx, p.cy, sz * 2.0, 0, Math.PI * 2)
+          ctx.fillStyle = innerH
+          ctx.fill()
+
+          // Crisp core
+          ctx.beginPath()
+          ctx.arc(p.cx, p.cy, sz, 0, Math.PI * 2)
+          ctx.fillStyle = core
+          ctx.fill()
+
+          // Cross sparkle for large bright nodes
+          if (p.r > 1.4 && a > 0.52) {
+            const arm = sz * 3.2
+            ctx.save()
+            ctx.strokeStyle = core
+            ctx.lineWidth = 0.6 / zoomRef.current
+            ctx.globalAlpha = a * 0.42
+            ctx.beginPath()
+            ctx.moveTo(p.cx - arm, p.cy)
+            ctx.lineTo(p.cx + arm, p.cy)
+            ctx.moveTo(p.cx, p.cy - arm)
+            ctx.lineTo(p.cx, p.cy + arm)
+            ctx.stroke()
+            ctx.restore()
+          }
+        }
+      }
+
+      // ── Layer 0: stars behind the rope ────────────────────────────
+      drawStars(0)
 
       // Continuous cord path — rope passes through knots uninterrupted
       const cordPath = (getY: (px: number) => number) => {
@@ -120,28 +303,28 @@ export function RopeTimeline({ nodes }: RopeTimelineProps) {
       // ── Trunk: bloom + core ────────────────────────────────────────
       ctx.save()
       cordPath((px) => getRopeYBlended(px, t, H, hovIdx))
-      ctx.strokeStyle = "rgba(180,120,15,0.65)"
-      ctx.lineWidth = 2 / zoomRef.current
+      ctx.strokeStyle = "rgba(185,128,20,0.55)"
+      ctx.lineWidth = 3 / zoomRef.current
       ctx.lineCap = "round"
-      ctx.filter = `blur(${2 / zoomRef.current}px)`
+      ctx.filter = `blur(${3 / zoomRef.current}px)`
       ctx.stroke()
       ctx.filter = "none"
       ctx.restore()
 
       ctx.save()
       cordPath((px) => getRopeYBlended(px, t, H, hovIdx))
-      ctx.strokeStyle = "#ba8a37"
-      ctx.lineWidth = 1 / zoomRef.current
+      ctx.strokeStyle = "#B07018"
+      ctx.lineWidth = 1.2 / zoomRef.current
       ctx.lineCap = "round"
       ctx.stroke()
       ctx.restore()
 
       // ── 4 helical filaments ────────────────────────────────────────
       const filaments = [
-        { phase: 0,              amp: 9,  glowColor: "rgba(220,170,40,0.12)",  coreColor: "rgba(240,200,80,0.70)" },
-        { phase: Math.PI,        amp: 9,  glowColor: "rgba(180,130,20,0.10)",  coreColor: "rgba(200,150,30,0.55)" },
-        { phase: Math.PI / 2,    amp: 13, glowColor: "rgba(210,160,35,0.08)",  coreColor: "rgba(230,180,60,0.45)" },
-        { phase: Math.PI * 1.5,  amp: 13, glowColor: "rgba(190,140,20,0.08)",  coreColor: "rgba(210,160,40,0.40)" },
+        { phase: 0,              amp: 9,  glowColor: "rgba(180,122,18,0.22)",  coreColor: "rgba(185,128,22,0.78)" },
+        { phase: Math.PI,        amp: 9,  glowColor: "rgba(158,108,15,0.18)",  coreColor: "rgba(172,118,18,0.62)" },
+        { phase: Math.PI / 2,    amp: 13, glowColor: "rgba(170,115,16,0.16)",  coreColor: "rgba(180,124,20,0.52)" },
+        { phase: Math.PI * 1.5,  amp: 13, glowColor: "rgba(162,110,15,0.16)",  coreColor: "rgba(175,120,18,0.48)" },
       ]
       for (const fil of filaments) {
         const filY = (px: number) => getRopeYBlended(px, t, H, hovIdx) + fil.amp * Math.sin(0.045 * px + fil.phase - t * 0.8)
@@ -192,7 +375,7 @@ export function RopeTimeline({ nodes }: RopeTimelineProps) {
           ctx.beginPath()
           ctx.moveTo(x0, y0)
           ctx.lineTo(x1, y1)
-          ctx.strokeStyle = `rgba(240,195,60,${bAlpha.toFixed(2)})`
+          ctx.strokeStyle = `rgba(180,122,25,${bAlpha.toFixed(2)})`
           ctx.lineWidth = (node.hasMemories ? 1.1 : 0.9) / zoomRef.current
           ctx.lineCap = "round"
           ctx.stroke()
@@ -209,8 +392,8 @@ export function RopeTimeline({ nodes }: RopeTimelineProps) {
           const alpha     = node.hasMemories
             ? (isHovered ? 0.55 + 0.38 * Math.abs(flicker) : 0.20 + 0.22 * Math.abs(flicker))
             : (0.08 + 0.12 * Math.abs(flicker))
-          const goldR = node.hasMemories ? (isHovered ? 235 : 210) : 190
-          const goldG = node.hasMemories ? (isHovered ? 190 : 162) : 140
+          const goldR = node.hasMemories ? (isHovered ? 185 : 165) : 148
+          const goldG = node.hasMemories ? (isHovered ? 125 : 100) : 82
           const edge = ballR * 0.85
           ctx.beginPath()
           ctx.moveTo(x + Math.cos(angle) * edge, y + Math.sin(angle) * edge)
@@ -224,19 +407,96 @@ export function RopeTimeline({ nodes }: RopeTimelineProps) {
         // Tiny center anchor (1px) — just to anchor the eye
         ctx.beginPath()
         ctx.arc(x, y, 1.2 / zoomRef.current, 0, Math.PI * 2)
-        ctx.fillStyle = "rgba(255,240,160,0.85)"
+        ctx.fillStyle = "rgba(175,118,22,0.88)"
         ctx.fill()
 
         // Year label
         const fontSize = Math.max(8, Math.min(11, 10 / zoomRef.current))
         ctx.font = `${isHovered ? "500" : "400"} ${fontSize}px Inter, sans-serif`
-        ctx.fillStyle = isHovered ? "#7A4E00" : node.hasMemories ? "#A07020" : "#B09060"
+        ctx.fillStyle = isHovered ? "#1A1A1A" : node.hasMemories ? "#C9748A" : "#A09890"
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
         ctx.fillText(String(node.year), x, y - burstR - 10 / zoomRef.current)
       })
 
+      // ── Layer 1: stars in front of the rope ───────────────────────
+      drawStars(1)
+
       ctx.restore()
+
+      // ── Cursor glow orb (screen-space, drawn on top of everything) ───
+      const mouseCursor = mousePosRef.current
+      if (mouseCursor) {
+        const mx = mouseCursor.x
+        const my = mouseCursor.y
+        const pulse = 0.5 + 0.5 * Math.sin(t * 3.2)
+        // Outer diffuse nebula
+        const gOuter = ctx.createRadialGradient(mx, my, 0, mx, my, 130)
+        gOuter.addColorStop(0, "rgba(196,116,138,0.10)")
+        gOuter.addColorStop(1, "rgba(196,116,138,0)")
+        ctx.fillStyle = gOuter
+        ctx.beginPath()
+        ctx.arc(mx, my, 130, 0, Math.PI * 2)
+        ctx.fill()
+        // Pulsing mid ring
+        const ringR = 36 + pulse * 12
+        const gMid = ctx.createRadialGradient(mx, my, 0, mx, my, ringR)
+        gMid.addColorStop(0, `rgba(220,140,165,${(0.24 + pulse * 0.12).toFixed(3)})`)
+        gMid.addColorStop(1, "rgba(196,116,138,0)")
+        ctx.fillStyle = gMid
+        ctx.beginPath()
+        ctx.arc(mx, my, ringR, 0, Math.PI * 2)
+        ctx.fill()
+        // Crisp inner core
+        const gCore = ctx.createRadialGradient(mx, my, 0, mx, my, 8)
+        gCore.addColorStop(0, "rgba(255,218,228,0.92)")
+        gCore.addColorStop(0.45, "rgba(220,140,165,0.52)")
+        gCore.addColorStop(1, "rgba(196,116,138,0)")
+        ctx.fillStyle = gCore
+        ctx.beginPath()
+        ctx.arc(mx, my, 8, 0, Math.PI * 2)
+        ctx.fill()
+        // Crosshair arms
+        const arm = 16 + pulse * 6
+        ctx.save()
+        ctx.strokeStyle = "rgba(196,116,138,0.42)"
+        ctx.lineWidth = 0.9
+        ctx.lineCap = "round"
+        ctx.beginPath()
+        ctx.moveTo(mx - arm, my)
+        ctx.lineTo(mx + arm, my)
+        ctx.moveTo(mx, my - arm)
+        ctx.lineTo(mx, my + arm)
+        ctx.stroke()
+        ctx.restore()
+      }
+
+      // ── Scrollbar sync ────────────────────────────────────────────
+      const sbThumb = scrollbarThumbRef.current
+      const sbTrack = scrollbarTrackRef.current
+      if (sbThumb && sbTrack) {
+        const contentWidth = nodes.length * KNOT_SPACING * zoomRef.current
+        if (contentWidth <= W) {
+          sbThumb.style.opacity = "0"
+          sbThumb.style.pointerEvents = "none"
+        } else {
+          const trackWidth = sbTrack.offsetWidth
+          const totalContentWidth = nodes.length * KNOT_SPACING
+          const visibleWidth = W / zoomRef.current
+          const thumbWidthFrac = Math.min(1, visibleWidth / totalContentWidth)
+          const thumbPx = Math.max(40, thumbWidthFrac * trackWidth)
+          const scrollRange = totalContentWidth - visibleWidth
+          const visibleLeft = -panXRef.current / zoomRef.current
+          const scrollFrac = scrollRange > 0 ? Math.max(0, Math.min(1, visibleLeft / scrollRange)) : 0
+          const thumbLeft = scrollFrac * (trackWidth - thumbPx)
+          sbThumb.style.width = `${thumbPx}px`
+          sbThumb.style.transform = `translateX(${thumbLeft}px)`
+          sbThumb.style.opacity = "1"
+          sbThumb.style.pointerEvents = "auto"
+          scrollbarDragThumbWidthRef.current = thumbPx
+        }
+      }
+
       animRef.current = requestAnimationFrame(draw)
     }
 
@@ -257,7 +517,7 @@ export function RopeTimeline({ nodes }: RopeTimelineProps) {
       const rect = canvas.getBoundingClientRect()
       const mouseX = e.clientX - rect.left
       const delta = e.deltaY > 0 ? 0.9 : 1.1
-      const newZoom = Math.min(4, Math.max(0.25, zoomRef.current * delta))
+      const newZoom = Math.min(3, Math.max(0.5, zoomRef.current * delta))
       panXRef.current =
         mouseX - (mouseX - panXRef.current) * (newZoom / zoomRef.current)
       zoomRef.current = newZoom
@@ -266,6 +526,35 @@ export function RopeTimeline({ nodes }: RopeTimelineProps) {
     canvas.addEventListener("wheel", onWheel, { passive: false })
     return () => canvas.removeEventListener("wheel", onWheel)
   }, [])
+
+  // ── Scrollbar drag ────────────────────────────────────────
+  useEffect(() => {
+    const onMouseMove = (e: MouseEvent) => {
+      if (!isScrollbarDraggingRef.current) return
+      const track = scrollbarTrackRef.current
+      const canvas = canvasRef.current
+      if (!track || !canvas) return
+      const trackWidth = track.offsetWidth
+      const thumbWidth = scrollbarDragThumbWidthRef.current
+      const totalContentWidth = nodes.length * KNOT_SPACING
+      const visibleWidth = canvas.offsetWidth / zoomRef.current
+      const scrollRange = totalContentWidth - visibleWidth
+      if (scrollRange <= 0) return
+      const startVisibleLeft = -scrollbarDragStartPanRef.current / zoomRef.current
+      const startFrac = Math.max(0, Math.min(1, startVisibleLeft / scrollRange))
+      const dx = e.clientX - scrollbarDragStartXRef.current
+      const scrollableTrack = trackWidth - thumbWidth
+      const newFrac = Math.max(0, Math.min(1, startFrac + dx / scrollableTrack))
+      panXRef.current = -newFrac * scrollRange * zoomRef.current
+    }
+    const onMouseUp = () => { isScrollbarDraggingRef.current = false }
+    document.addEventListener("mousemove", onMouseMove)
+    document.addEventListener("mouseup", onMouseUp)
+    return () => {
+      document.removeEventListener("mousemove", onMouseMove)
+      document.removeEventListener("mouseup", onMouseUp)
+    }
+  }, [nodes])
 
   // ── Hover ─────────────────────────────────────────────────────────
   const getHoveredNode = useCallback(
@@ -294,6 +583,9 @@ export function RopeTimeline({ nodes }: RopeTimelineProps) {
     (e: React.MouseEvent<HTMLCanvasElement>) => {
       const canvas = canvasRef.current
       if (!canvas) return
+
+      const rect = canvas.getBoundingClientRect()
+      mousePosRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
 
       if (isDraggingRef.current) {
         panXRef.current = dragStartPanRef.current + (e.clientX - dragStartXRef.current)
@@ -336,6 +628,15 @@ export function RopeTimeline({ nodes }: RopeTimelineProps) {
     []
   )
 
+  const handleMouseLeave = useCallback(
+    (e: React.MouseEvent<HTMLCanvasElement>) => {
+      isDraggingRef.current = false
+      mousePosRef.current = null
+      ;(e.currentTarget as HTMLCanvasElement).style.cursor = "grab"
+    },
+    []
+  )
+
   // ── Click (nav vers l'année) ───────────────────────────────────────
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -367,19 +668,38 @@ export function RopeTimeline({ nodes }: RopeTimelineProps) {
 
   return (
     <div
-      className="relative w-full h-full"
+      className="relative w-full h-full flex flex-col bg-[#FAF7F2]"
       onClick={() => setContextMenu(null)}
     >
       <canvas
         ref={canvasRef}
-        className="w-full h-full cursor-grab"
+        className="w-full flex-1 min-h-0 cursor-grab"
         onMouseMove={handleMouseMove}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
+        onMouseLeave={handleMouseLeave}
         onContextMenu={handleContextMenu}
         onClick={handleClick}
       />
+
+      {/* Horizontal scrollbar */}
+      <div
+        ref={scrollbarTrackRef}
+        className="relative h-1.5 mx-6 my-2.5 bg-black/10 rounded-full shrink-0"
+      >
+        <div
+          ref={scrollbarThumbRef}
+          className="absolute top-0 left-0 h-1.5 bg-[#C9748A]/50 rounded-full cursor-pointer hover:bg-[#C9748A]/75 transition-colors"
+          style={{ opacity: 0, width: 40 }}
+          onMouseDown={(e) => {
+            e.stopPropagation()
+            e.preventDefault()
+            isScrollbarDraggingRef.current = true
+            scrollbarDragStartXRef.current = e.clientX
+            scrollbarDragStartPanRef.current = panXRef.current
+          }}
+        />
+      </div>
 
       {/* Menu contextuel */}
       {contextMenu && (
