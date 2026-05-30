@@ -71,17 +71,19 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           </form>
         </div>
 
-        {/* Mobile burger */}
-        <MobileNav />
+        {/* Mobile — no burger, bottom nav handles navigation */}
       </header>
 
       {/* Page content */}
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 pb-20 md:pb-0">{children}</main>
 
       {/* Footer */}
-      <footer className="border-t border-black/10 px-8 py-4 text-center text-xs text-[#888888]">
+      <footer className="border-t border-black/10 px-8 py-4 text-center text-xs text-[#888888] hidden md:block">
         © {new Date().getFullYear()} Chris Verichon — Tous droits réservés
       </footer>
+
+      {/* Mobile bottom nav */}
+      <MobileNav />
     </div>
   )
 }

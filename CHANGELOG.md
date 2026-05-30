@@ -11,6 +11,14 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [0.13.0] — 2026-05-10
+### Added
+- `components/nav/MobileNav.tsx` — mobile bottom tab bar (fixed, `md:hidden`) with 4 items: Timeline, Monde, Galerie, + Ajouter (prominent rose CTA); active route highlighting via `usePathname`
+- Footer hidden on mobile (visible only `md:` and above)
+- `main` gets `pb-20 md:pb-0` to clear the bottom nav on mobile
+
+---
+
 ## [0.12.0] — 2026-05-10
 ### Added
 - `public/world-110m.json` — Natural Earth 110m TopoJSON world atlas
