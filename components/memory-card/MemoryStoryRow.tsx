@@ -84,11 +84,11 @@ export function MemoryStoryRow({ memory, index }: Props) {
         {/* ── Text ── */}
         <div className={`w-full sm:w-[54%] flex flex-col gap-3 ${isReversed ? "sm:items-end sm:text-right" : ""}`}>
           {/* Date */}
-          <p className="text-sm text-[#888888]">{formatDate(memory.memory_date)}</p>
+          <p className="text-sm text-[#fdf6ec]/50">{formatDate(memory.memory_date)}</p>
 
           {/* Title */}
           <h2
-            className="text-2xl md:text-3xl text-[#1A1A1A] leading-snug group-hover:text-[#C9748A] transition-colors duration-200"
+            className="text-2xl md:text-3xl text-[#fdf6ec] leading-snug group-hover:text-[#F4B8C1] transition-colors duration-200"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
             {memory.title}
@@ -96,7 +96,7 @@ export function MemoryStoryRow({ memory, index }: Props) {
 
           {/* Country */}
           {memory.country_name && (
-            <p className="flex items-center gap-1.5 text-sm text-[#888888]" style={isReversed ? { justifyContent: "flex-end" } : {}}>
+            <p className="flex items-center gap-1.5 text-sm text-[#fdf6ec]/55" style={isReversed ? { justifyContent: "flex-end" } : {}}>
               <MapPin className="w-3.5 h-3.5 shrink-0" />
               {memory.country_name}
             </p>
@@ -104,7 +104,7 @@ export function MemoryStoryRow({ memory, index }: Props) {
 
           {/* Description */}
           {memory.description && (
-            <p className="text-[#888888] leading-relaxed line-clamp-4 text-sm">
+            <p className="text-[#fdf6ec]/65 leading-relaxed line-clamp-4 text-sm">
               {memory.description}
             </p>
           )}

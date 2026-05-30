@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
-import { WorldMap } from "@/components/world-map/WorldMap"
+import { GlobeWorld } from "@/components/world-map/GlobeWorld"
 import type { Memory } from "@/lib/types"
 
 type CountryRow = {
@@ -54,19 +54,19 @@ export default async function WorldPage() {
       {/* Header */}
       <div>
         <h1
-          className="text-4xl md:text-5xl text-[#1A1A1A]"
+          className="text-4xl md:text-5xl text-[#fdf6ec]"
           style={{ fontFamily: "var(--font-playfair)" }}
         >
           Carte du monde
         </h1>
-        <p className="mt-2 text-[#888888] text-sm">
+        <p className="mt-2 text-[#fdf6ec]/55 text-sm">
           {countriesData.length === 0
             ? "Renseigne un pays sur tes souvenirs pour les voir apparaître ici."
             : `${countriesData.length} pays visité${countriesData.length > 1 ? "s" : ""} · ${memories.length} souvenir${memories.length > 1 ? "s" : ""}`}
         </p>
       </div>
 
-      <WorldMap countriesData={countriesData} />
+      <GlobeWorld countriesData={countriesData} />
 
       {/* Country list below map */}
       {countriesData.length > 0 && (
@@ -76,10 +76,10 @@ export default async function WorldPage() {
             .map((c) => (
               <div
                 key={c.code}
-                className="flex items-center justify-between px-4 py-3 rounded-xl bg-white border border-black/8 shadow-[0_2px_8px_rgba(0,0,0,0.04)]"
+                className="flex items-center justify-between px-4 py-3 rounded-xl bg-white/5 backdrop-blur-md border border-white/10"
               >
-                <span className="text-sm text-[#1A1A1A] truncate">{c.name}</span>
-                <span className="ml-2 shrink-0 text-xs font-semibold text-[#C9748A] bg-[#F4B8C1]/20 px-2 py-0.5 rounded-full">
+                <span className="text-sm text-[#fdf6ec]/85 truncate">{c.name}</span>
+                <span className="ml-2 shrink-0 text-xs font-semibold text-[#F4B8C1] bg-[#F4B8C1]/15 px-2 py-0.5 rounded-full">
                   {c.count}
                 </span>
               </div>

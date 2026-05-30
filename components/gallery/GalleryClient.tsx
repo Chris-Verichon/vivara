@@ -111,8 +111,8 @@ export function GalleryClient({ memories, years, countries }: Props) {
           onClick={() => setShowFilters((v) => !v)}
           className={`flex items-center gap-2 text-sm px-4 py-2 rounded-xl border transition-colors ${
             showFilters || activeFiltersCount > 0
-              ? "border-[#C9748A] text-[#C9748A] bg-[#F4B8C1]/10"
-              : "border-black/10 text-[#888888] hover:border-[#C9748A] hover:text-[#C9748A]"
+              ? "border-[#C9748A] text-[#F4B8C1] bg-[#F4B8C1]/10"
+              : "border-white/15 text-[#fdf6ec]/60 hover:border-[#F4B8C1] hover:text-[#F4B8C1]"
           }`}
         >
           <SlidersHorizontal size={15} />
@@ -128,7 +128,7 @@ export function GalleryClient({ memories, years, countries }: Props) {
         {activeFiltersCount > 0 && (
           <button
             onClick={resetFilters}
-            className="flex items-center gap-1 text-xs text-[#888888] hover:text-[#C9748A] transition-colors"
+            className="flex items-center gap-1 text-xs text-[#fdf6ec]/55 hover:text-[#F4B8C1] transition-colors"
           >
             <X size={13} />
             Réinitialiser
@@ -137,28 +137,28 @@ export function GalleryClient({ memories, years, countries }: Props) {
 
         {/* Sort */}
         <div className="ml-auto flex items-center gap-2">
-          <label className="text-xs text-[#888888] hidden sm:block">Trier :</label>
+          <label className="text-xs text-[#fdf6ec]/55 hidden sm:block">Trier :</label>
           <div className="relative">
             <select
               value={sort}
               onChange={(e) => { setSort(e.target.value as SortOrder); setPage(1) }}
-              className="appearance-none text-sm bg-white border border-black/10 rounded-xl pl-3 pr-8 py-2 text-[#1A1A1A] cursor-pointer focus:outline-none focus:border-[#C9748A] hover:border-[#C9748A] transition-colors"
+              className="appearance-none text-sm bg-white/5 border border-white/15 rounded-xl pl-3 pr-8 py-2 text-[#fdf6ec] cursor-pointer focus:outline-none focus:border-[#F4B8C1] hover:border-[#F4B8C1] transition-colors"
             >
-              <option value="anti-chrono">Plus récents</option>
-              <option value="chrono">Plus anciens</option>
-              <option value="random">Aléatoire</option>
+              <option value="anti-chrono" className="bg-[#0b0a14] text-[#fdf6ec]">Plus récents</option>
+              <option value="chrono" className="bg-[#0b0a14] text-[#fdf6ec]">Plus anciens</option>
+              <option value="random" className="bg-[#0b0a14] text-[#fdf6ec]">Aléatoire</option>
             </select>
-            <ChevronDown size={14} className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#888888]" />
+            <ChevronDown size={14} className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#fdf6ec]/55" />
           </div>
         </div>
       </div>
 
       {/* ── Filter panel ── */}
       {showFilters && (
-        <div className="bg-white rounded-2xl border border-black/8 p-5 flex flex-col gap-5 shadow-[0_4px_24px_rgba(0,0,0,0.05)]">
+        <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-5 flex flex-col gap-5">
           {/* Type */}
           <div className="flex flex-col gap-2">
-            <p className="text-xs font-medium text-[#1A1A1A] uppercase tracking-wide">Type</p>
+            <p className="text-xs font-medium text-[#fdf6ec]/80 uppercase tracking-wide">Type</p>
             <div className="flex flex-wrap gap-2">
               {(["all", "photo", "video", "text"] as MediaType[]).map((t) => (
                 <button
@@ -167,7 +167,7 @@ export function GalleryClient({ memories, years, countries }: Props) {
                   className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
                     mediaType === t
                       ? "bg-[#C9748A] border-[#C9748A] text-white"
-                      : "border-black/10 text-[#888888] hover:border-[#C9748A] hover:text-[#C9748A]"
+                      : "border-white/15 text-[#fdf6ec]/60 hover:border-[#F4B8C1] hover:text-[#F4B8C1]"
                   }`}
                 >
                   {t === "all" ? "Tout" : t === "photo" ? "Photos" : t === "video" ? "Vidéos" : "Texte"}
@@ -179,7 +179,7 @@ export function GalleryClient({ memories, years, countries }: Props) {
           {/* Years */}
           {years.length > 0 && (
             <div className="flex flex-col gap-2">
-              <p className="text-xs font-medium text-[#1A1A1A] uppercase tracking-wide">Années</p>
+              <p className="text-xs font-medium text-[#fdf6ec]/80 uppercase tracking-wide">Années</p>
               <div className="flex flex-wrap gap-2">
                 {years.map((year) => (
                   <button
@@ -188,7 +188,7 @@ export function GalleryClient({ memories, years, countries }: Props) {
                     className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
                       selectedYears.includes(year)
                         ? "bg-[#C9748A] border-[#C9748A] text-white"
-                        : "border-black/10 text-[#888888] hover:border-[#C9748A] hover:text-[#C9748A]"
+                        : "border-white/15 text-[#fdf6ec]/60 hover:border-[#F4B8C1] hover:text-[#F4B8C1]"
                     }`}
                   >
                     {year}
@@ -201,7 +201,7 @@ export function GalleryClient({ memories, years, countries }: Props) {
           {/* Countries */}
           {countries.length > 0 && (
             <div className="flex flex-col gap-2">
-              <p className="text-xs font-medium text-[#1A1A1A] uppercase tracking-wide">Pays</p>
+              <p className="text-xs font-medium text-[#fdf6ec]/80 uppercase tracking-wide">Pays</p>
               <div className="flex flex-wrap gap-2">
                 {countries.map(({ code, name }) => (
                   <button
@@ -210,7 +210,7 @@ export function GalleryClient({ memories, years, countries }: Props) {
                     className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
                       selectedCountries.includes(code)
                         ? "bg-[#C9748A] border-[#C9748A] text-white"
-                        : "border-black/10 text-[#888888] hover:border-[#C9748A] hover:text-[#C9748A]"
+                        : "border-white/15 text-[#fdf6ec]/60 hover:border-[#F4B8C1] hover:text-[#F4B8C1]"
                     }`}
                   >
                     {name}
@@ -223,7 +223,7 @@ export function GalleryClient({ memories, years, countries }: Props) {
       )}
 
       {/* ── Result count ── */}
-      <p className="text-sm text-[#888888]">
+      <p className="text-sm text-[#fdf6ec]/55">
         {sorted.length === 0
           ? "Aucun souvenir"
           : `${sorted.length} souvenir${sorted.length > 1 ? "s" : ""}`}
@@ -233,8 +233,8 @@ export function GalleryClient({ memories, years, countries }: Props) {
       {/* ── Masonry grid ── */}
       {sorted.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 text-center gap-2">
-          <p className="text-[#888888]">Aucun souvenir ne correspond aux filtres.</p>
-          <button onClick={resetFilters} className="text-sm text-[#C9748A] hover:underline">
+          <p className="text-[#fdf6ec]/55">Aucun souvenir ne correspond aux filtres.</p>
+          <button onClick={resetFilters} className="text-sm text-[#F4B8C1] hover:underline">
             Voir tous les souvenirs
           </button>
         </div>
@@ -252,7 +252,7 @@ export function GalleryClient({ memories, years, countries }: Props) {
             <div className="flex justify-center pt-4">
               <button
                 onClick={() => setPage((p) => p + 1)}
-                className="px-8 py-3 rounded-xl border border-[#C9748A] text-[#C9748A] text-sm font-medium hover:bg-[#F4B8C1]/10 transition-colors"
+                className="px-8 py-3 rounded-xl border border-[#C9748A] text-[#F4B8C1] text-sm font-medium hover:bg-[#F4B8C1]/10 transition-colors"
               >
                 Voir plus ({sorted.length - visible.length} restants)
               </button>

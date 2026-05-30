@@ -60,7 +60,7 @@ export default async function YearPage({ params }: Props) {
       {/* Back to timeline */}
       <Link
         href="/timeline"
-        className="flex items-center gap-1.5 text-sm text-[#888888] hover:text-[#C9748A] transition-colors w-fit"
+        className="flex items-center gap-1.5 text-sm text-[#fdf6ec]/60 hover:text-[#F4B8C1] transition-colors w-fit"
       >
         <ArrowLeft size={15} />
         Retour à la timeline
@@ -70,12 +70,12 @@ export default async function YearPage({ params }: Props) {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h1
-            className="text-6xl md:text-8xl text-[#1A1A1A] leading-none"
+            className="text-6xl md:text-8xl text-[#fdf6ec] leading-none"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
             {year}
           </h1>
-          <p className="text-[#888888] mt-2 text-sm">
+          <p className="text-[#fdf6ec]/55 mt-2 text-sm">
             {memories.length === 0
               ? "Aucun souvenir pour cette année"
               : `${memories.length} ${memories.length === 1 ? "souvenir" : "souvenirs"}`}
@@ -87,7 +87,7 @@ export default async function YearPage({ params }: Props) {
           {adjacent.prev && (
             <Link
               href={`/timeline/${adjacent.prev}`}
-              className="flex items-center gap-1.5 text-sm text-[#888888] hover:text-[#C9748A] transition-colors px-3 py-2 rounded-xl hover:bg-[#F4B8C1]/10"
+              className="flex items-center gap-1.5 text-sm text-[#fdf6ec]/60 hover:text-[#F4B8C1] transition-colors px-3 py-2 rounded-xl hover:bg-[#F4B8C1]/10"
             >
               <ArrowLeft size={14} />
               {adjacent.prev}
@@ -96,7 +96,7 @@ export default async function YearPage({ params }: Props) {
           {adjacent.next && (
             <Link
               href={`/timeline/${adjacent.next}`}
-              className="flex items-center gap-1.5 text-sm text-[#888888] hover:text-[#C9748A] transition-colors px-3 py-2 rounded-xl hover:bg-[#F4B8C1]/10"
+              className="flex items-center gap-1.5 text-sm text-[#fdf6ec]/60 hover:text-[#F4B8C1] transition-colors px-3 py-2 rounded-xl hover:bg-[#F4B8C1]/10"
             >
               {adjacent.next}
               <ArrowRight size={14} />
@@ -115,10 +115,10 @@ export default async function YearPage({ params }: Props) {
       {/* Memories story layout */}
       {memories.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 gap-3 text-center">
-          <p className="text-[#888888]">Pas encore de souvenirs pour {year}.</p>
+          <p className="text-[#fdf6ec]/55">Pas encore de souvenirs pour {year}.</p>
           <Link
             href={`/memory/new?year=${year}`}
-            className="text-sm text-[#C9748A] hover:underline"
+            className="text-sm text-[#F4B8C1] hover:underline"
           >
             Ajouter le premier
           </Link>

@@ -27,7 +27,7 @@ export function SettingsForm({ config }: { config: Config }) {
     <form action={dispatch} className="flex flex-col gap-8">
       {/* Owner name */}
       <fieldset className="flex flex-col gap-2">
-        <label htmlFor="owner_name" className="text-sm font-medium text-[#1A1A1A]">
+        <label htmlFor="owner_name" className="text-sm font-medium text-[#fdf6ec]/85">
           Votre prénom
         </label>
         <input
@@ -37,13 +37,13 @@ export function SettingsForm({ config }: { config: Config }) {
           defaultValue={config.owner_name}
           placeholder="ex. Chris"
           maxLength={80}
-          className="w-full px-4 py-3 rounded-2xl border border-black/10 bg-white text-sm text-[#1A1A1A] placeholder:text-[#888888] focus:outline-none focus:ring-2 focus:ring-[#F4B8C1] transition"
+          className="w-full px-4 py-3 rounded-2xl border border-white/15 bg-white/5 text-sm text-[#fdf6ec] placeholder:text-[#fdf6ec]/40 focus:outline-none focus:ring-2 focus:ring-[#F4B8C1]/40 focus:border-[#F4B8C1] transition"
         />
       </fieldset>
 
       {/* Birth year */}
       <fieldset className="flex flex-col gap-2">
-        <label htmlFor="birth_year" className="text-sm font-medium text-[#1A1A1A]">
+        <label htmlFor="birth_year" className="text-sm font-medium text-[#fdf6ec]/85">
           Année de naissance
         </label>
         <input
@@ -54,14 +54,14 @@ export function SettingsForm({ config }: { config: Config }) {
           placeholder="ex. 1995"
           min={1900}
           max={new Date().getFullYear()}
-          className="w-full px-4 py-3 rounded-2xl border border-black/10 bg-white text-sm text-[#1A1A1A] placeholder:text-[#888888] focus:outline-none focus:ring-2 focus:ring-[#F4B8C1] transition"
+          className="w-full px-4 py-3 rounded-2xl border border-white/15 bg-white/5 text-sm text-[#fdf6ec] placeholder:text-[#fdf6ec]/40 focus:outline-none focus:ring-2 focus:ring-[#F4B8C1]/40 focus:border-[#F4B8C1] transition"
         />
-        <p className="text-xs text-[#888888]">La ligne de temps commencera à cette année.</p>
+        <p className="text-xs text-[#fdf6ec]/50">La ligne de temps commencera à cette année.</p>
       </fieldset>
 
       {/* Welcome message */}
       <fieldset className="flex flex-col gap-2">
-        <label htmlFor="welcome_message" className="text-sm font-medium text-[#1A1A1A]">
+        <label htmlFor="welcome_message" className="text-sm font-medium text-[#fdf6ec]/85">
           Message de bienvenue
         </label>
         <input
@@ -71,14 +71,14 @@ export function SettingsForm({ config }: { config: Config }) {
           defaultValue={config.welcome_message}
           placeholder="ex. Bienvenue dans mes souvenirs"
           maxLength={200}
-          className="w-full px-4 py-3 rounded-2xl border border-black/10 bg-white text-sm text-[#1A1A1A] placeholder:text-[#888888] focus:outline-none focus:ring-2 focus:ring-[#F4B8C1] transition"
+          className="w-full px-4 py-3 rounded-2xl border border-white/15 bg-white/5 text-sm text-[#fdf6ec] placeholder:text-[#fdf6ec]/40 focus:outline-none focus:ring-2 focus:ring-[#F4B8C1]/40 focus:border-[#F4B8C1] transition"
         />
-        <p className="text-xs text-[#888888]">Affiché en haut de la page d&apos;accueil.</p>
+        <p className="text-xs text-[#fdf6ec]/50">Affiché en haut de la page d&apos;accueil.</p>
       </fieldset>
 
       {/* Quote */}
       <fieldset className="flex flex-col gap-2">
-        <label htmlFor="quote" className="text-sm font-medium text-[#1A1A1A]">
+        <label htmlFor="quote" className="text-sm font-medium text-[#fdf6ec]/85">
           Citation du jour
         </label>
         <textarea
@@ -88,9 +88,9 @@ export function SettingsForm({ config }: { config: Config }) {
           placeholder="ex. « La vie est faite de petits moments qui font de grands souvenirs. »"
           maxLength={400}
           rows={3}
-          className="w-full px-4 py-3 rounded-2xl border border-black/10 bg-white text-sm text-[#1A1A1A] placeholder:text-[#888888] focus:outline-none focus:ring-2 focus:ring-[#F4B8C1] transition resize-none"
+          className="w-full px-4 py-3 rounded-2xl border border-white/15 bg-white/5 text-sm text-[#fdf6ec] placeholder:text-[#fdf6ec]/40 focus:outline-none focus:ring-2 focus:ring-[#F4B8C1]/40 focus:border-[#F4B8C1] transition resize-none"
         />
-        <p className="text-xs text-[#888888]">Affichée en bas de la page d&apos;accueil.</p>
+        <p className="text-xs text-[#fdf6ec]/50">Affichée en bas de la page d&apos;accueil.</p>
       </fieldset>
 
       {/* Feedback */}

@@ -1,11 +1,9 @@
 import { createClient } from "@/lib/supabase/server"
-import { FlowerHero } from "@/components/hero/FlowerHero"
+import { ConstellationHero, type HeroMemory } from "@/components/home/ConstellationHero"
+import { SmoothScrollProvider } from "@/components/three/SmoothScrollProvider"
 import Link from "next/link"
 import { Clock, Globe, ImageIcon } from "lucide-react"
 import { formatMemoryDate } from "@/lib/utils"
-import type { Memory } from "@/lib/types"
-
-type MemoryPreview = Pick<Memory, "id" | "title" | "memory_date" | "country_name">
 
 // ---------------------------------------------------------------------------
 // Data fetching
@@ -19,14 +17,14 @@ async function getHomeData() {
     .from("memories")
     .select("id, title, memory_date, country_name")
     .order("memory_date", { ascending: false })
-    .limit(3)
+    .limit(60)
 
   const config: Record<string, string> = {}
   configRows?.forEach(({ key, value }) => {
     if (value) config[key] = value
   })
 
-  const memories = (memoriesResult.data ?? []) as MemoryPreview[]
+  const memories = (memoriesResult.data ?? []) as HeroMemory[]
   return { config, memories }
 }
 
@@ -63,48 +61,51 @@ export default async function HomePage() {
   const { config, memories } = await getHomeData()
   const ownerName = config["owner_name"] ?? "Vivàra"
   const welcomeMessage = config["welcome_message"] ?? "Bienvenue"
+  const recent = memories.slice(0, 3)
 
   return (
-    <>
-      {/* Full-viewport flower video hero */}
-      <FlowerHero />
+    <SmoothScrollProvider>
+      {/* Immersive nocturnal constellation hero (fixed 3D backdrop) */}
+      <ConstellationHero
+        memories={memories}
+        ownerName={ownerName}
+        welcomeMessage={welcomeMessage}
+      />
 
-      {/* Content below the fold */}
-      <div className="max-w-4xl mx-auto px-6 py-16 flex flex-col gap-14">
-        {/* Section title */}
-        <section className="text-center flex flex-col items-center gap-2">
-          <h1
-            className="text-3xl md:text-4xl text-[#1A1A1A] leading-tight"
-            style={{ fontFamily: "var(--font-playfair)" }}
+      {/* Content below the fold — floats over the constellation */}
+      <div className="relative z-10 mx-auto flex max-w-4xl flex-col gap-14 px-6 py-20">
+        <section className="flex flex-col items-center gap-2 text-center">
+          <h2
+            className="text-3xl leading-tight text-[#fdf6ec] md:text-4xl"
+            style={{ fontFamily: "var(--font-playfair), serif" }}
           >
-            {welcomeMessage},{" "}
-            <span className="text-[#C9748A]">{ownerName}</span>
-          </h1>
-          <p className="text-[#888888] text-base">
+            {welcomeMessage}, <span className="text-[#F4B8C1]">{ownerName}</span>
+          </h2>
+          <p className="text-base text-[#fdf6ec]/60">
             Votre journal de vie, pour toujours.
           </p>
         </section>
 
         {/* Entry cards */}
         <section>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {ENTRY_CARDS.map(({ href, Icon, label, description }) => (
               <Link
                 key={href}
                 href={href}
-                className="group rounded-2xl bg-white border border-[#F4B8C1]/20 p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] flex flex-col gap-3 hover:shadow-[0_4px_32px_rgba(201,116,138,0.18)] transition-shadow duration-200"
+                className="group flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md transition-colors duration-200 hover:border-[#F4B8C1]/40 hover:bg-white/10"
               >
-                <div className="w-10 h-10 rounded-xl bg-[#F4B8C1]/20 flex items-center justify-center group-hover:bg-[#F4B8C1]/40 transition-colors">
-                  <Icon size={20} className="text-[#C9748A]" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F4B8C1]/15 transition-colors group-hover:bg-[#F4B8C1]/30">
+                  <Icon size={20} className="text-[#F4B8C1]" />
                 </div>
                 <div>
                   <p
-                    className="font-medium text-[#1A1A1A]"
-                    style={{ fontFamily: "var(--font-playfair)" }}
+                    className="font-medium text-[#fdf6ec]"
+                    style={{ fontFamily: "var(--font-playfair), serif" }}
                   >
                     {label}
                   </p>
-                  <p className="text-sm text-[#888888] mt-1 leading-snug">
+                  <p className="mt-1 text-sm leading-snug text-[#fdf6ec]/55">
                     {description}
                   </p>
                 </div>
@@ -114,40 +115,40 @@ export default async function HomePage() {
         </section>
 
         {/* Last 3 memories */}
-        {memories.length > 0 && (
+        {recent.length > 0 && (
           <section className="flex flex-col gap-4">
             <h2
-              className="text-xl text-[#1A1A1A]"
-              style={{ fontFamily: "var(--font-playfair)" }}
+              className="text-xl text-[#fdf6ec]"
+              style={{ fontFamily: "var(--font-playfair), serif" }}
             >
               Derniers souvenirs
             </h2>
             <div className="flex flex-col gap-3">
-              {memories.map((memory) => (
+              {recent.map((memory) => (
                 <Link
                   key={memory.id}
-                  href={`/memories/${memory.id}`}
-                  className="rounded-2xl bg-white border border-[#F4B8C1]/20 p-5 shadow-[0_4px_24px_rgba(0,0,0,0.06)] flex items-center justify-between gap-4 hover:shadow-[0_4px_32px_rgba(201,116,138,0.18)] transition-shadow duration-200"
+                  href={`/memory/${memory.id}`}
+                  className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md transition-colors duration-200 hover:border-[#F4B8C1]/40 hover:bg-white/10"
                 >
                   <div className="min-w-0">
                     <p
-                      className="font-medium text-[#1A1A1A] truncate"
-                      style={{ fontFamily: "var(--font-playfair)" }}
+                      className="truncate font-medium text-[#fdf6ec]"
+                      style={{ fontFamily: "var(--font-playfair), serif" }}
                     >
                       {memory.title}
                     </p>
-                    <p className="text-sm text-[#888888] mt-0.5">
+                    <p className="mt-0.5 text-sm text-[#fdf6ec]/55">
                       {formatMemoryDate(memory.memory_date)}
                       {memory.country_name && ` · ${memory.country_name}`}
                     </p>
                   </div>
-                  <span className="text-[#F4B8C1] shrink-0 text-lg">→</span>
+                  <span className="shrink-0 text-lg text-[#F4B8C1]">→</span>
                 </Link>
               ))}
             </div>
           </section>
         )}
       </div>
-    </>
+    </SmoothScrollProvider>
   )
 }

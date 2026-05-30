@@ -14,13 +14,13 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   if (!user) redirect("/login")
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      {/* Navbar — visible on all screen sizes */}
-      <header className="flex items-center justify-between px-6 md:px-8 py-4 bg-white/80 backdrop-blur-sm border-b border-black/10 sticky top-0 z-40">
+    <div className="flex min-h-screen flex-col bg-night">
+      {/* Navbar — nocturnal glass, visible on all screen sizes */}
+      <header className="sticky top-0 z-40 flex items-center justify-between border-b border-white/10 bg-[#0b0a14]/70 px-6 py-4 backdrop-blur-md md:px-8">
         <Link href="/" className="flex items-center gap-2">
-          <LeafIcon size={24} className="text-[#C9748A]" />
+          <LeafIcon size={24} className="text-[#F4B8C1]" />
           <span
-            className="text-xl text-[#C9748A]"
+            className="text-xl text-[#F4B8C1]"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
             Vivàra
@@ -28,24 +28,24 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         </Link>
 
         {/* Desktop nav links */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden items-center gap-6 md:flex">
           <Link
             href="/timeline"
-            className="flex items-center gap-1.5 text-sm text-[#888888] hover:text-[#C9748A] transition-colors"
+            className="flex items-center gap-1.5 text-sm text-[#fdf6ec]/70 transition-colors hover:text-[#F4B8C1]"
           >
             <Clock size={16} />
             Timeline
           </Link>
           <Link
             href="/world"
-            className="flex items-center gap-1.5 text-sm text-[#888888] hover:text-[#C9748A] transition-colors"
+            className="flex items-center gap-1.5 text-sm text-[#fdf6ec]/70 transition-colors hover:text-[#F4B8C1]"
           >
             <Globe size={16} />
             World
           </Link>
           <Link
             href="/gallery"
-            className="flex items-center gap-1.5 text-sm text-[#888888] hover:text-[#C9748A] transition-colors"
+            className="flex items-center gap-1.5 text-sm text-[#fdf6ec]/70 transition-colors hover:text-[#F4B8C1]"
           >
             <ImageIcon size={16} />
             Gallery
@@ -53,10 +53,10 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         </nav>
 
         {/* Desktop right actions */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden items-center gap-4 md:flex">
           <Link
             href="/settings"
-            className="text-[#888888] hover:text-[#C9748A] transition-colors"
+            className="text-[#fdf6ec]/70 transition-colors hover:text-[#F4B8C1]"
             aria-label="Settings"
           >
             <Settings size={18} />
@@ -64,7 +64,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <form action={signOut}>
             <button
               type="submit"
-              className="text-sm text-[#888888] hover:text-[#C9748A] transition-colors"
+              className="text-sm text-[#fdf6ec]/70 transition-colors hover:text-[#F4B8C1]"
             >
               Sign out
             </button>
@@ -78,7 +78,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <main className="flex-1 pb-20 md:pb-0">{children}</main>
 
       {/* Footer */}
-      <footer className="border-t border-black/10 px-8 py-4 text-center text-xs text-[#888888] hidden md:block">
+      <footer className="hidden border-t border-white/10 px-8 py-4 text-center text-xs text-[#fdf6ec]/45 md:block">
         © {new Date().getFullYear()} Chris Verichon — Tous droits réservés
       </footer>
 

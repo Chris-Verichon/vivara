@@ -35,7 +35,7 @@ export default async function MemoryDetailPage({ params }: Props) {
       <div className="flex items-center justify-between">
         <Link
           href={`/timeline/${year}`}
-          className="flex items-center gap-1.5 text-sm text-[#888888] hover:text-[#C9748A] transition-colors"
+          className="flex items-center gap-1.5 text-sm text-[#fdf6ec]/60 hover:text-[#F4B8C1] transition-colors"
         >
           <ArrowLeft size={15} />
           {year}
@@ -43,7 +43,7 @@ export default async function MemoryDetailPage({ params }: Props) {
         <div className="flex items-center gap-2">
           <Link
             href={`/memory/${memory.id}/edit`}
-            className="flex items-center gap-1.5 text-sm text-[#888888] hover:text-[#C9748A] transition-colors px-3 py-1.5 rounded-xl hover:bg-[#F4B8C1]/10"
+            className="flex items-center gap-1.5 text-sm text-[#fdf6ec]/60 hover:text-[#F4B8C1] transition-colors px-3 py-1.5 rounded-xl hover:bg-[#F4B8C1]/10"
           >
             <Pencil size={14} />
             Modifier
@@ -54,10 +54,10 @@ export default async function MemoryDetailPage({ params }: Props) {
 
       {/* Header */}
       <div className="flex flex-col gap-3">
-        <h1 className="text-4xl md:text-5xl text-[#1A1A1A] leading-tight" style={{ fontFamily: "var(--font-playfair)" }}>
+        <h1 className="text-4xl md:text-5xl text-[#fdf6ec] leading-tight" style={{ fontFamily: "var(--font-playfair)" }}>
           {memory.title}
         </h1>
-        <div className="flex flex-wrap items-center gap-4 text-sm text-[#888888]">
+        <div className="flex flex-wrap items-center gap-4 text-sm text-[#fdf6ec]/60">
           <span className="flex items-center gap-1.5">
             <Calendar size={14} />
             {formatMemoryDate(memory.memory_date)}
@@ -71,11 +71,11 @@ export default async function MemoryDetailPage({ params }: Props) {
         </div>
         {memory.tags && memory.tags.length > 0 && (
           <div className="flex flex-wrap items-center gap-2">
-            <Tag size={13} className="text-[#AAAAAA]" />
+            <Tag size={13} className="text-[#fdf6ec]/45" />
             {memory.tags.map((tag) => (
               <span
                 key={tag}
-                className="text-xs px-2.5 py-1 rounded-full bg-[#F4B8C1]/20 text-[#C9748A]"
+                className="text-xs px-2.5 py-1 rounded-full bg-[#F4B8C1]/15 text-[#F4B8C1]"
               >
                 {tag}
               </span>
@@ -86,7 +86,7 @@ export default async function MemoryDetailPage({ params }: Props) {
 
       {/* Description */}
       {memory.description && (
-        <p className="text-[#444444] leading-relaxed text-base whitespace-pre-wrap">
+        <p className="text-[#fdf6ec]/75 leading-relaxed text-base whitespace-pre-wrap">
           {memory.description}
         </p>
       )}

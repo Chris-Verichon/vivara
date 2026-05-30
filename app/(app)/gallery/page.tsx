@@ -37,19 +37,19 @@ export default async function GalleryPage() {
       {/* Header */}
       <div>
         <h1
-          className="text-4xl md:text-5xl text-[#1A1A1A]"
+          className="text-4xl md:text-5xl text-[#fdf6ec]"
           style={{ fontFamily: "var(--font-playfair)" }}
         >
           Galerie
         </h1>
-        <p className="mt-2 text-[#888888] text-sm">
+        <p className="mt-2 text-[#fdf6ec]/55 text-sm">
           Tous les souvenirs, à travers le temps et les pays.
         </p>
       </div>
 
       {memories.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-32 text-center gap-3">
-          <p className="text-[#888888]">Aucun souvenir pour l&apos;instant.</p>
+          <p className="text-[#fdf6ec]/55">Aucun souvenir pour l&apos;instant.</p>
         </div>
       ) : (
         <GalleryClient memories={memories} years={years} countries={countries} />
