@@ -51,7 +51,7 @@ export default async function TimelinePage() {
             Ma Vie
           </h1>
           <p className="text-sm text-[#888888] mt-0.5">
-            {nodes.length} années · {yearsWithMemories} avec des souvenirs
+            {nodes.length - 1} années · {yearsWithMemories} avec des souvenirs
           </p>
         </div>
         <Link
