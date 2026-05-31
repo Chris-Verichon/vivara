@@ -11,6 +11,23 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [0.16.0] — 2026-05-31
+### Added
+- `lib/r2.ts` — Cloudflare R2 helpers (server-only): `r2PutPresigned()` generates a presigned PUT URL (5 min TTL) via AWS SDK v3 + S3-compatible R2 endpoint; `r2DeleteObjects()` batch-deletes objects
+- `lib/media-url.ts` — shared `getMediaUrl(storagePath)` helper using `NEXT_PUBLIC_R2_PUBLIC_URL` (replaces the repeated Supabase URL pattern across all components)
+- `app/api/r2/presign/route.ts` — POST route that verifies Supabase auth, validates `memoryId` (UUID) and `suffix` (filename), enforces allowed MIME types, and returns a `{ url, key }` presigned PUT URL scoped to `{userId}/{memoryId}/{suffix}`
+### Changed
+- `app/(app)/memory/new/page.tsx` — upload now requests a presigned URL from `/api/r2/presign` then PUTs directly to R2; removed Supabase browser client
+- `components/memory-card/EditMemoryForm.tsx` — same presigned upload flow; removed Supabase browser client
+- `actions/memories.ts` — `updateMemory` and `deleteMemory` now call `r2DeleteObjects()` instead of `supabase.storage.remove()`
+- `components/memory-card/MemoryCard.tsx`, `MemoryStoryRow.tsx`, `MemoryMediaGallery.tsx`, `components/lightbox/Lightbox.tsx` — use shared `getMediaUrl` from `lib/media-url`
+- `next.config.ts` — R2 public hostname parsed from `NEXT_PUBLIC_R2_PUBLIC_URL` and added to Next.js Image `remotePatterns` at config time
+- `package.json` — added `@aws-sdk/client-s3`, `@aws-sdk/s3-request-presigner`
+### Migration note
+- Files previously uploaded to Supabase Storage remain accessible via their old URLs until manually migrated to R2. New uploads go to R2 exclusively.
+
+---
+
 ## [0.15.0] — 2026-05-30
 ### Added
 - **Nocturnal restyle (all pages)** — deep night palette (`#0b0a14`, `#060510`), rose atmosphere, Playfair Display headings; `app/globals.css` extended with night-mode custom properties and a global `night-gradient` class
