@@ -39,13 +39,13 @@ export function MemoryCard({ memory }: MemoryCardProps) {
 
   return (
     <motion.div
-      whileHover={{ scale: 1.025, boxShadow: "0 8px 32px rgba(0,0,0,0.10)" }}
+      whileHover={{ scale: 1.025, boxShadow: "0 8px 40px rgba(0,0,0,0.55)" }}
       transition={{ type: "spring", stiffness: 320, damping: 28 }}
-      className="rounded-2xl overflow-hidden bg-white shadow-[0_4px_24px_rgba(0,0,0,0.06)] break-inside-avoid"
+      className="rounded-2xl overflow-hidden bg-[#12102a] border border-white/8 shadow-[0_4px_32px_rgba(0,0,0,0.40)] break-inside-avoid"
     >
       <Link href={`/memory/${memory.id}`} className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9748A] rounded-2xl">
         {/* Media area */}
-        <div className="relative w-full aspect-[4/3] bg-[#FAF7F2]">
+        <div className="relative w-full aspect-[4/3] bg-[#0d0b1a]">
           {mediaSrc ? (
             <Image
               src={mediaSrc}
@@ -73,16 +73,16 @@ export function MemoryCard({ memory }: MemoryCardProps) {
         {/* Content */}
         <div className="p-4 flex flex-col gap-2">
           {/* Date */}
-          <p className="text-xs text-[#888888] font-[Inter]">{formatDate(memory.memory_date)}</p>
+          <p className="text-xs text-[#fdf6ec]/45 font-[Inter]">{formatDate(memory.memory_date)}</p>
 
           {/* Title */}
-          <h3 className="text-sm font-semibold text-[#1A1A1A] font-[Playfair_Display] leading-snug line-clamp-2">
+          <h3 className="text-sm font-semibold text-[#fdf6ec] font-[Playfair_Display] leading-snug line-clamp-2">
             {memory.title}
           </h3>
 
           {/* Description */}
           {memory.description && (
-            <p className="text-xs text-[#888888] line-clamp-2 leading-relaxed">
+            <p className="text-xs text-[#fdf6ec]/55 line-clamp-2 leading-relaxed">
               {memory.description}
             </p>
           )}
@@ -90,7 +90,7 @@ export function MemoryCard({ memory }: MemoryCardProps) {
           {/* Country + Tags */}
           <div className="flex flex-wrap items-center gap-1.5 mt-1">
             {memory.country_name && (
-              <Badge variant="secondary" className="flex items-center gap-1 text-[10px] px-2 py-0.5 bg-[#FAF7F2] text-[#888888] border-0">
+              <Badge variant="secondary" className="flex items-center gap-1 text-[10px] px-2 py-0.5 bg-white/8 text-[#fdf6ec]/55 border-0">
                 <MapPin className="w-2.5 h-2.5" />
                 {memory.country_name}
               </Badge>

@@ -11,6 +11,15 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [0.17.0] — 2026-05-31
+### Changed
+- `app/(auth)/login/page.tsx` — full nocturnal restyle: deep `#060510` background with rose radial glow, glass card (`bg-white/5 backdrop-blur-md border border-white/10`), dark-styled inputs; translated to French ("Mot de passe", "Se connecter", "Ta vie, tes histoires.")
+- `app/(app)/layout.tsx` — desktop nav links translated to French: "Timeline" → "Fil du temps", "World" → "Monde", "Gallery" → "Galerie"; sign-out button → "Se déconnecter"
+- `components/nav/MobileNav.tsx` — mobile nav label "Timeline" → "Fil du temps"
+- `components/memory-card/MemoryCard.tsx` — nocturnal card theme: dark card background (`#12102a`), cream text palette (`#fdf6ec`), adjusted shadows and badge colours to match night palette
+
+---
+
 ## [0.16.0] — 2026-05-31
 ### Added
 - `lib/r2.ts` — Cloudflare R2 helpers (server-only): `r2PutPresigned()` generates a presigned PUT URL (5 min TTL) via AWS SDK v3 + S3-compatible R2 endpoint; `r2DeleteObjects()` batch-deletes objects
