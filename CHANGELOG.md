@@ -7,7 +7,27 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
-## [Unreleased]
+## [1.0.0] — 2026-05-31 — Production Release
+### Summary
+First stable production release of Vivàra. All core features are complete, tested, and styled.
+
+### Features
+- **Memories** — full CRUD (create, read, update, delete) with photos, videos, and rich text; media stored in Cloudflare R2 via presigned PUT uploads
+- **Timeline** — immersive 3D braided constellation (CatmullRomCurve3 strands, BraidFlow animated flux, MemoryStar nodes, ScrollControls camera) with nocturnal starfield
+- **World** — interactive nocturnal 3D globe (three-globe v2, earcut polygon layer, OrbitControls, auto-rotate); visited countries highlighted in rose and clickable
+- **Gallery** — masonry grid with live filters (type, year, country), sort (chrono / anti-chrono / random), pagination, and nocturnal card theme
+- **Home** — immersive constellation hero (WebGL, adaptive device tier, fallback for low-end devices)
+- **Auth** — Supabase email/password; redirect to home after sign-in
+- **Settings** — display name and avatar customisation
+- **Design system** — full nocturnal palette (`#0b0a14`, `#060510`, rose `#F4B8C1`), Playfair Display headings, Inter body, glass-card components throughout
+- **i18n** — full French UI (nav, forms, labels, messages)
+
+### Infrastructure
+- Next.js 16.2.4 (React 19, App Router, Server Components, Server Actions)
+- TypeScript strict — zero `any`
+- Supabase PostgreSQL + Row-Level Security (multi-table migrations)
+- Cloudflare R2 file storage (`lib/r2.ts`, `/api/r2/presign` route, shared `getMediaUrl`)
+- `proxy.ts` replacing `middleware.ts` (Next.js 16 breaking change)
 
 ---
 
