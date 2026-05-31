@@ -6,15 +6,11 @@ import { motion } from "framer-motion"
 import { Play, FileText, MapPin } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import type { MemoryWithMedia } from "@/lib/types"
+import { getMediaUrl } from "@/lib/media-url"
 
 interface Props {
   memory: MemoryWithMedia
   index: number
-}
-
-function getMediaUrl(storagePath: string): string {
-  const base = process.env.NEXT_PUBLIC_SUPABASE_URL
-  return `${base}/storage/v1/object/public/memories/${storagePath}`
 }
 
 function formatDate(isoDate: string): string {
