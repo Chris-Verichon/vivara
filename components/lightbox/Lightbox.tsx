@@ -6,12 +6,9 @@ import { X, ChevronLeft, ChevronRight, MapPin, Calendar } from "lucide-react"
 import dynamic from "next/dynamic"
 import type { MediaFile, Memory } from "@/lib/types"
 import { formatMemoryDate } from "@/lib/utils"
+import { getMediaUrl } from "@/lib/media-url"
 
 const ReactPlayer = dynamic(() => import("react-player"), { ssr: false })
-
-function getMediaUrl(storagePath: string): string {
-  return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/memories/${storagePath}`
-}
 
 interface LightboxProps {
   media: MediaFile[]

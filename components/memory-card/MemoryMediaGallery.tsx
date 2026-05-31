@@ -5,12 +5,7 @@ import Image from "next/image"
 import { Play } from "lucide-react"
 import { Lightbox } from "@/components/lightbox/Lightbox"
 import type { MemoryWithMedia } from "@/lib/types"
-
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
-
-function getMediaUrl(storagePath: string): string {
-  return `${SUPABASE_URL}/storage/v1/object/public/memories/${storagePath}`
-}
+import { getMediaUrl } from "@/lib/media-url"
 
 interface MemoryMediaGalleryProps {
   memory: MemoryWithMedia

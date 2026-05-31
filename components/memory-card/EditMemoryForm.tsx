@@ -3,10 +3,10 @@
 import { useState, useTransition } from "react"
 import { ArrowLeft, X } from "lucide-react"
 import Link from "next/link"
-import { createBrowserClient } from "@supabase/ssr"
 import { DropZone, type UploadFile } from "@/components/upload/DropZone"
 import { updateMemory } from "@/actions/memories"
 import type { MemoryWithMedia, MediaFile } from "@/lib/types"
+import { getMediaUrl } from "@/lib/media-url"
 
 const COUNTRIES: { code: string; name: string }[] = [
   { code: "AF", name: "Afghanistan" }, { code: "AL", name: "Albanie" }, { code: "DZ", name: "Algérie" },
@@ -66,30 +66,28 @@ const COUNTRIES: { code: string; name: string }[] = [
   { code: "ZW", name: "Zimbabwe" },
 ]
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
-
-function getMediaUrl(path: string) {
-  return `${SUPABASE_URL}/storage/v1/object/public/memories/${path}`
-}
-
-function getSupabaseClient() {
-  return createBrowserClient(
-    SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
-}
-
 async function uploadFile(
-  supabase: ReturnType<typeof getSupabaseClient>,
-  userId: string,
   memoryId: string,
   file: File,
   position: number
 ): Promise<{ storagePath: string; width: number | null; height: number | null }> {
   const ext = file.name.split(".").pop() ?? "bin"
-  const path = `${userId}/${memoryId}/${position}_${Date.now()}.${ext}`
-  const { error } = await supabase.storage.from("memories").upload(path, file, { upsert: false })
-  if (error) throw new Error(error.message)
+  const suffix = `${position}_${Date.now()}.${ext}`
+
+  const presignRes = await fetch("/api/r2/presign", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ memoryId, suffix, contentType: file.type }),
+  })
+  if (!presignRes.ok) throw new Error("Impossible d'obtenir l'URL d'upload.")
+  const { url, key } = (await presignRes.json()) as { url: string; key: string }
+
+  const uploadRes = await fetch(url, {
+    method: "PUT",
+    body: file,
+    headers: { "Content-Type": file.type },
+  })
+  if (!uploadRes.ok) throw new Error("Échec de l'upload.")
 
   let width: number | null = null
   let height: number | null = null
@@ -101,12 +99,10 @@ async function uploadFile(
       img.src = URL.createObjectURL(file)
     })
   }
-  return { storagePath: path, width, height }
+  return { storagePath: key, width, height }
 }
 
 async function uploadVideoThumbnail(
-  supabase: ReturnType<typeof getSupabaseClient>,
-  userId: string,
   memoryId: string,
   thumbnailDataUrl: string,
   position: number
@@ -114,10 +110,23 @@ async function uploadVideoThumbnail(
   if (!thumbnailDataUrl) return null
   const res = await fetch(thumbnailDataUrl)
   const blob = await res.blob()
-  const path = `${userId}/${memoryId}/thumb_${position}.jpg`
-  const { error } = await supabase.storage.from("memories").upload(path, blob, { contentType: "image/jpeg", upsert: false })
-  if (error) return null
-  return path
+  const suffix = `thumb_${position}.jpg`
+
+  const presignRes = await fetch("/api/r2/presign", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ memoryId, suffix, contentType: "image/jpeg" }),
+  })
+  if (!presignRes.ok) return null
+  const { url, key } = (await presignRes.json()) as { url: string; key: string }
+
+  const uploadRes = await fetch(url, {
+    method: "PUT",
+    body: blob,
+    headers: { "Content-Type": "image/jpeg" },
+  })
+  if (!uploadRes.ok) return null
+  return key
 }
 
 interface ExistingMedia {
@@ -199,10 +208,6 @@ export function EditMemoryForm({ memory }: Props) {
     if (!date) { setFormError("La date est requise."); return }
 
     startTransition(async () => {
-      const supabase = getSupabaseClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { setFormError("Non authentifié."); return }
-
       const newMediaInputs = []
       const basePosition = existingMedia.length
 
@@ -210,10 +215,10 @@ export function EditMemoryForm({ memory }: Props) {
         const f = newFiles[i]
         setUploadProgress(`Upload ${i + 1} / ${newFiles.length}…`)
         try {
-          const { storagePath, width, height } = await uploadFile(supabase, user.id, memory.id, f.file, basePosition + i)
+          const { storagePath, width, height } = await uploadFile(memory.id, f.file, basePosition + i)
           let thumbnailPath: string | null = null
           if (f.fileType === "video" && f.thumbnailUrl) {
-            thumbnailPath = await uploadVideoThumbnail(supabase, user.id, memory.id, f.thumbnailUrl, basePosition + i)
+            thumbnailPath = await uploadVideoThumbnail(memory.id, f.thumbnailUrl, basePosition + i)
           }
           newMediaInputs.push({
             storagePath,

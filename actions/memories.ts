@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
+import { r2DeleteObjects } from "@/lib/r2"
 import type { MediaFile } from "@/lib/types"
 
 interface MediaInput {
@@ -116,9 +117,9 @@ export async function updateMemory(
     .eq("id", memoryId)
   if (updateError) return { error: updateError.message }
 
-  // Delete removed media from Storage
+  // Delete removed files from R2.
   if (input.removedStoragePaths.length > 0) {
-    await supabase.storage.from("memories").remove(input.removedStoragePaths)
+    await r2DeleteObjects(input.removedStoragePaths)
   }
 
   // Delete removed media_files records (any not in keepMediaIds)
@@ -138,7 +139,7 @@ export async function updateMemory(
       const paths = (allMedia as Pick<MediaFile, "storage_path" | "thumbnail_path">[]).flatMap((m) =>
         m.thumbnail_path ? [m.storage_path, m.thumbnail_path] : [m.storage_path]
       )
-      await supabase.storage.from("memories").remove(paths)
+      await r2DeleteObjects(paths)
     }
     await supabase.from("media_files").delete().eq("memory_id", memoryId)
   }
@@ -191,7 +192,7 @@ export async function deleteMemory(memoryId: string): Promise<{ error: string } 
     const paths = (mediaFiles as Pick<MediaFile, "storage_path" | "thumbnail_path">[]).flatMap((m) =>
       m.thumbnail_path ? [m.storage_path, m.thumbnail_path] : [m.storage_path]
     )
-    await supabase.storage.from("memories").remove(paths)
+    await r2DeleteObjects(paths)
   }
 
   // Delete memory (cascades media_files via FK)
