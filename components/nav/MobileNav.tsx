@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { Clock, Globe, ImageIcon, Plus } from "lucide-react"
 
 const NAV_ITEMS = [
-  { href: "/timeline", Icon: Clock, label: "Timeline" },
+  { href: "/timeline", Icon: Clock, label: "Fil du temps" },
   { href: "/world", Icon: Globe, label: "Monde" },
   { href: "/gallery", Icon: ImageIcon, label: "Galerie" },
 ]

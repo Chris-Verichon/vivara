@@ -34,21 +34,21 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             className="flex items-center gap-1.5 text-sm text-[#fdf6ec]/70 transition-colors hover:text-[#F4B8C1]"
           >
             <Clock size={16} />
-            Timeline
+            Fil du temps
           </Link>
           <Link
             href="/world"
             className="flex items-center gap-1.5 text-sm text-[#fdf6ec]/70 transition-colors hover:text-[#F4B8C1]"
           >
             <Globe size={16} />
-            World
+            Monde
           </Link>
           <Link
             href="/gallery"
             className="flex items-center gap-1.5 text-sm text-[#fdf6ec]/70 transition-colors hover:text-[#F4B8C1]"
           >
             <ImageIcon size={16} />
-            Gallery
+            Galerie
           </Link>
         </nav>
 
@@ -66,7 +66,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               type="submit"
               className="text-sm text-[#fdf6ec]/70 transition-colors hover:text-[#F4B8C1]"
             >
-              Sign out
+              Se déconnecter
             </button>
           </form>
         </div>
