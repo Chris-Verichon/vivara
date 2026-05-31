@@ -17,6 +17,14 @@
   --color-rose-pale: var(--rose-pale);
   --color-rose-dark: var(--rose-dark);
   --color-muted-text: var(--muted-text);
+
+  /* Vivàra nocturnal (immersive 3D) palette */
+  --color-night: var(--night);
+  --color-night-deep: var(--night-deep);
+  --color-night-rose: var(--night-rose);
+  --color-star: var(--star);
+  --color-star-rose: var(--star-rose);
+  --color-star-gold: var(--star-gold);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -63,8 +71,16 @@
   --rose-dark: oklch(0.62 0.12 10);
   --muted-text: oklch(0.6 0 0);
 
+  /* Vivàra nocturnal palette — immersive constellation (hex for three.js parity) */
+  --night: #0b0a14;          /* deep ink/violet night sky */
+  --night-deep: #060510;     /* darkest depth */
+  --night-rose: #1a0f1c;     /* warm rose-tinted shadow */
+  --star: #fdf6ec;           /* warm starlight white */
+  --star-rose: #f4b8c1;      /* rose star (memory) */
+  --star-gold: #d4b896;      /* muted gold star (empty year) */
+
   /* shadcn tokens mapped to Vivàra */
-  --background: oklch(0.979 0.008 76); /* linen */
+  --background: oklch(1 0 0);           /* white — matches topbar */
   --foreground: oklch(0.145 0 0);      /* ink */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -146,5 +162,40 @@
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-playfair), serif;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Immersive constellation (3D / WebGL) helpers
+   --------------------------------------------------------------------------- */
+
+/* Deep nocturnal gradient used as the canvas backdrop and HTML fallback */
+.bg-night {
+  background:
+    radial-gradient(120% 120% at 50% 10%, var(--night-rose) 0%, var(--night) 45%, var(--night-deep) 100%);
+}
+
+/* Fade-in for HTML overlays mounted over the 3D scene */
+@keyframes night-fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-night-fade-in {
+  animation: night-fade-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Soft pulsing scroll cue */
+@keyframes scroll-cue {
+  0%, 100% { opacity: 0.35; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(6px); }
+}
+.animate-scroll-cue {
+  animation: scroll-cue 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-night-fade-in,
+  .animate-scroll-cue {
+    animation: none;
   }
 }

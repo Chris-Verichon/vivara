@@ -1,0 +1,15 @@
+-- Useful query: memory count per country for the world map
+-- SELECT country_code, country_name, COUNT(*) as count
+-- FROM public.memories
+-- WHERE user_id = auth.uid() AND country_code IS NOT NULL
+-- GROUP BY country_code, country_name
+-- ORDER BY count DESC;
+
+-- Useful query: distinct years with memory count for the timeline
+-- SELECT
+--   EXTRACT(YEAR FROM memory_date)::int AS year,
+--   COUNT(*) AS count
+-- FROM public.memories
+-- WHERE user_id = auth.uid()
+-- GROUP BY year
+-- ORDER BY year ASC;
