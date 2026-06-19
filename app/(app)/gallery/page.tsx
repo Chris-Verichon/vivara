@@ -1,6 +1,8 @@
 import { createClient } from "@/lib/supabase/server"
 import { GalleryClient } from "@/components/gallery/GalleryClient"
 import type { MemoryWithMedia } from "@/lib/types"
+import Link from "next/link"
+import { Plus } from "lucide-react"
 
 async function getAllMemories(): Promise<MemoryWithMedia[]> {
   const supabase = await createClient()
@@ -35,16 +37,25 @@ export default async function GalleryPage() {
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col gap-8">
       {/* Header */}
-      <div>
-        <h1
-          className="text-4xl md:text-5xl text-[#fdf6ec]"
-          style={{ fontFamily: "var(--font-playfair)" }}
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1
+            className="text-4xl md:text-5xl text-[#fdf6ec]"
+            style={{ fontFamily: "var(--font-playfair)" }}
+          >
+            Galerie
+          </h1>
+          <p className="mt-2 text-[#fdf6ec]/55 text-sm">
+            Tous les souvenirs, à travers le temps et les pays.
+          </p>
+        </div>
+        <Link
+          href="/memory/new"
+          className="shrink-0 flex items-center gap-2 rounded-xl bg-[#C9748A] px-4 py-2 text-sm text-white transition-colors hover:bg-[#b5637a]"
         >
-          Galerie
-        </h1>
-        <p className="mt-2 text-[#fdf6ec]/55 text-sm">
-          Tous les souvenirs, à travers le temps et les pays.
-        </p>
+          <Plus size={16} />
+          Ajouter
+        </Link>
       </div>
 
       {memories.length === 0 ? (

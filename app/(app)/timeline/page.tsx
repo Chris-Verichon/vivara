@@ -40,7 +40,7 @@ export default async function TimelinePage() {
   const yearsWithMemories = nodes.filter((n) => n.hasMemories).length
 
   return (
-    <div className="flex h-[calc(100vh-65px)] flex-col bg-night">
+    <div className="flex h-[calc(100dvh-145px)] flex-col bg-night md:h-[calc(100vh-65px)]">
       {/* En-tête */}
       <div className="flex shrink-0 items-center justify-between border-b border-white/10 px-6 py-4 md:px-8">
         <div>

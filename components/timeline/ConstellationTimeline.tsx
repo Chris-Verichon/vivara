@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useRef } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import dynamic from "next/dynamic"
 import { useFrame } from "@react-three/fiber"
@@ -12,6 +12,7 @@ import { DriftParticles } from "@/components/three/DriftParticles"
 import { MemoryStar } from "@/components/three/MemoryStar"
 import { getSceneTuning, NIGHT_COLORS } from "@/components/three/constellation"
 import { RopeTimeline } from "@/components/timeline/RopeTimeline"
+import { TimelineYearRail, type RailYear } from "@/components/timeline/TimelineYearRail"
 import type { DeviceTier } from "@/lib/device"
 
 const SceneCanvas = dynamic(
@@ -50,6 +51,46 @@ function buildCurve(count: number): { curve: CatmullRomCurve3; points: Vector3[]
     points.push(new Vector3(last.x, last.y, last.z - NODE_SPACING * 1.5))
   }
   return { curve: new CatmullRomCurve3(points, false, "catmullrom", 0.5), points }
+}
+
+/**
+ * For each year node, compute the scroll offset (0..1) that places it in view.
+ * The camera follows `curve.getPointAt(offset)`, so we sample the curve and
+ * find, for every node, the offset whose point shares the node's depth (z).
+ * Mirrors the geometry built by {@link buildCurve} / {@link ThreadCamera}.
+ */
+function computeYearOffsets(nodes: TimelineNode[]): RailYear[] {
+  if (nodes.length === 0) return []
+  const { curve } = buildCurve(nodes.length)
+  const SAMPLES = 600
+  const sampleZ: number[] = []
+  const v = new Vector3()
+  for (let s = 0; s <= SAMPLES; s++) {
+    curve.getPointAt(s / SAMPLES, v)
+    sampleZ.push(v.z)
+  }
+  return nodes.map((node, i) => {
+    const targetZ = -i * NODE_SPACING
+    let bestT = 0
+    let bestD = Infinity
+    for (let s = 0; s <= SAMPLES; s++) {
+      const d = Math.abs(sampleZ[s] - targetZ)
+      if (d < bestD) {
+        bestD = d
+        bestT = s / SAMPLES
+      }
+    }
+    return { year: node.year, hasMemories: node.hasMemories, offset: Math.min(1, Math.max(0, bestT)) }
+  })
+}
+
+/** Bridges the drei scroll element out of the R3F tree to the HTML rail. */
+function ScrollBridge({ onEl }: { onEl: (el: HTMLElement) => void }) {
+  const scroll = useScroll()
+  useEffect(() => {
+    if (scroll?.el) onEl(scroll.el)
+  }, [scroll, onEl])
+  return null
 }
 
 // ---------------------------------------------------------------------------
@@ -272,6 +313,53 @@ export function ConstellationTimeline({ nodes }: ConstellationTimelineProps) {
   const { ready, enabled, tier } = useWebGLSupport()
   const router = useRouter()
 
+  const yearOffsets = useMemo(() => computeYearOffsets(nodes), [nodes])
+  const [scrollEl, setScrollEl] = useState<HTMLElement | null>(null)
+  const [activeYear, setActiveYear] = useState<number | null>(null)
+
+  const handleScrollEl = useCallback((el: HTMLElement) => setScrollEl(el), [])
+
+  // Keep the rail's active year in sync with the current scroll position.
+  useEffect(() => {
+    if (!scrollEl || yearOffsets.length === 0) return
+    let raf = 0
+    const update = () => {
+      const max = scrollEl.scrollHeight - scrollEl.clientHeight
+      const offset = max > 0 ? scrollEl.scrollTop / max : 0
+      let best = yearOffsets[0]
+      let bestD = Infinity
+      for (const yo of yearOffsets) {
+        const d = Math.abs(yo.offset - offset)
+        if (d < bestD) {
+          bestD = d
+          best = yo
+        }
+      }
+      setActiveYear((prev) => (prev === best.year ? prev : best.year))
+    }
+    const onScroll = () => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(update)
+    }
+    scrollEl.addEventListener("scroll", onScroll, { passive: true })
+    update()
+    return () => {
+      scrollEl.removeEventListener("scroll", onScroll)
+      cancelAnimationFrame(raf)
+    }
+  }, [scrollEl, yearOffsets])
+
+  // Jump to a year. The camera lerps toward the new offset, so an instant
+  // scroll still reads as a smooth glide through the constellation.
+  const jumpToOffset = useCallback(
+    (offset: number) => {
+      if (!scrollEl) return
+      const max = scrollEl.scrollHeight - scrollEl.clientHeight
+      scrollEl.scrollTo({ top: offset * max })
+    },
+    [scrollEl]
+  )
+
   // Fallback to the original 2D canvas timeline.
   if (ready && !enabled) {
     return <RopeTimeline nodes={nodes} />
@@ -284,6 +372,7 @@ export function ConstellationTimeline({ nodes }: ConstellationTimelineProps) {
       {ready && enabled && (
         <SceneCanvas tier={tier} cameraPosition={[0, 1.4, 8]} fogFar={50}>
           <ScrollControls pages={pages} damping={0.3}>
+            <ScrollBridge onEl={handleScrollEl} />
             <TimelineScene
               nodes={nodes}
               tier={tier}
@@ -294,9 +383,14 @@ export function ConstellationTimeline({ nodes }: ConstellationTimelineProps) {
         </SceneCanvas>
       )}
 
+      {/* Quick-travel year rail */}
+      {ready && enabled && (
+        <TimelineYearRail years={yearOffsets} activeYear={activeYear} onJump={jumpToOffset} />
+      )}
+
       {/* Hint overlay */}
-      <div className="pointer-events-none absolute bottom-4 left-1/2 z-10 -translate-x-1/2 text-center text-xs text-[#fdf6ec]/50">
-        Faites défiler pour remonter le temps · Cliquez une année · Clic droit pour ajouter
+      <div className="pointer-events-none absolute bottom-4 left-1/2 z-10 -translate-x-1/2 px-12 text-center text-xs text-[#fdf6ec]/50">
+        Faites défiler ou utilisez la règle des années · Cliquez une année · Clic droit pour ajouter
       </div>
     </div>
   )

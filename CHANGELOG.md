@@ -7,6 +7,45 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [1.1.2] — 2026-06-19
+### Fixed
+- **Login / forms** (`app/globals.css`): autofilled inputs turned white again when focused. Tailwind's focus-ring (`@layer utilities`) box-shadow was overriding the autofill mask. The `-webkit-autofill` rules are now unlayered so they win over utilities, and the focused state composes both the dark mask and the rose focus ring in a single box-shadow
+
+---
+
+## [1.1.1] — 2026-06-19
+### Fixed
+- **Login / forms** (`app/globals.css`): autofilled inputs were still showing a white background (cream text became invisible). The `-webkit-autofill` inset shadow was near-transparent and let the browser's white background bleed through — it is now an opaque dark fill (`#14111e`) that fully masks it
+
+---
+
+## [1.1.0] — 2026-06-19
+### Added
+- **Timeline — quick-travel year rail** (`components/timeline/TimelineYearRail.tsx`): a vertical rail pinned to the right edge of the constellation timeline. Tap or drag-scrub a year to jump straight to it (oldest at top, newest at bottom); milestone and memory years are marked and the current year is highlighted in rose. Works with touch and pointer; the camera glides to the target via the existing scroll lerp
+- **Navigation** — the "Ajouter" action is now present on all three main sections: the Gallery and World page headers gained the same rose add button the Timeline already had
+
+### Changed
+- **Timeline — mobile** (`app/(app)/timeline/page.tsx`): the timeline view height now adapts to mobile (`100dvh`) so the legend clears the bottom navigation bar instead of being hidden behind it; the hint copy mentions the new year rail
+- **Mobile navigation** (`components/nav/MobileNav.tsx`): the "Ajouter" button no longer pokes out above the bar — it now sits cleanly inside the bottom nav as an evenly-spaced item
+- **Mobile header** (`app/(app)/layout.tsx`): Settings and Sign-out are now reachable on mobile via icons in the header (previously desktop-only)
+- **Memories — nocturnal theme**: memory create/edit forms (inputs, date pickers with `color-scheme: dark`, country autocomplete dropdowns, tag inputs, error boxes), the upload DropZone, the card skeleton, the edit-form media tiles, the detail media-gallery placeholders, and the delete-confirm dialog were all moved off white onto the night palette (`bg-white/5`, `border-white/15`, cream text)
+- **Settings** (`components/settings/SettingsForm.tsx`): success/error feedback boxes restyled for the dark theme
+
+### Fixed
+- **Memory detail** (`components/memory-card/DeleteMemoryButton.tsx`): the Delete button hover/highlight no longer flashes a near-white background — it now uses a dark-friendly red tint matching the destructive intent
+- **Forms** (`app/globals.css`): browser autofill no longer paints inputs solid white/yellow on the login page and forms (`-webkit-autofill` override keeps them on the nocturnal theme)
+
+---
+
+## [1.0.1] — 2026-06-19
+### Fixed
+- **Auth** — authenticated users hitting `/login` now land on the home page instead of the timeline, matching the post-sign-in redirect
+
+### Changed
+- **Navigation** — the desktop nav now highlights the active tab (and Settings) in rose, so the current section is always visible, consistent with the mobile bottom nav
+
+---
+
 ## [1.0.0] — 2026-05-31 — Production Release
 ### Summary
 First stable production release of Vivàra. All core features are complete, tested, and styled.
