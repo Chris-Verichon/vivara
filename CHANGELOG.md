@@ -7,6 +7,12 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [1.1.2] — 2026-06-19
+### Fixed
+- **Login / forms** (`app/globals.css`): autofilled inputs turned white again when focused. Tailwind's focus-ring (`@layer utilities`) box-shadow was overriding the autofill mask. The `-webkit-autofill` rules are now unlayered so they win over utilities, and the focused state composes both the dark mask and the rose focus ring in a single box-shadow
+
+---
+
 ## [1.1.1] — 2026-06-19
 ### Fixed
 - **Login / forms** (`app/globals.css`): autofilled inputs were still showing a white background (cream text became invisible). The `-webkit-autofill` inset shadow was near-transparent and let the browser's white background bleed through — it is now an opaque dark fill (`#14111e`) that fully masks it
