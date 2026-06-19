@@ -164,15 +164,18 @@
     font-family: var(--font-playfair), serif;
   }
   /* Keep autofilled fields on the nocturnal theme — browsers otherwise paint
-     a solid white/yellow background that breaks the dark login & forms. */
+     a solid white/yellow background that breaks the dark login & forms.
+     The inset shadow must be opaque to fully mask the autofill background. */
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
+  input:-webkit-autofill:active,
   textarea:-webkit-autofill,
   select:-webkit-autofill {
     -webkit-text-fill-color: #fdf6ec;
     caret-color: #fdf6ec;
-    -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.04) inset;
+    -webkit-box-shadow: 0 0 0 1000px #14111e inset;
+    box-shadow: 0 0 0 1000px #14111e inset;
     transition: background-color 9999s ease-in-out 0s;
   }
 }

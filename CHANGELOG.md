@@ -7,6 +7,12 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [1.1.1] — 2026-06-19
+### Fixed
+- **Login / forms** (`app/globals.css`): autofilled inputs were still showing a white background (cream text became invisible). The `-webkit-autofill` inset shadow was near-transparent and let the browser's white background bleed through — it is now an opaque dark fill (`#14111e`) that fully masks it
+
+---
+
 ## [1.1.0] — 2026-06-19
 ### Added
 - **Timeline — quick-travel year rail** (`components/timeline/TimelineYearRail.tsx`): a vertical rail pinned to the right edge of the constellation timeline. Tap or drag-scrub a year to jump straight to it (oldest at top, newest at bottom); milestone and memory years are marked and the current year is highlighted in rose. Works with touch and pointer; the camera glides to the target via the existing scroll lerp
