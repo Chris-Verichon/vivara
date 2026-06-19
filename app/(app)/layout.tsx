@@ -2,8 +2,9 @@ import { signOut } from "@/actions/auth"
 import { createClient } from "@/lib/supabase/server"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { Clock, Globe, ImageIcon, Settings, LeafIcon } from "lucide-react"
+import { LeafIcon } from "lucide-react"
 import { MobileNav } from "@/components/nav/MobileNav"
+import { DesktopNav, SettingsNavLink } from "@/components/nav/DesktopNav"
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -28,39 +29,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         </Link>
 
         {/* Desktop nav links */}
-        <nav className="hidden items-center gap-6 md:flex">
-          <Link
-            href="/timeline"
-            className="flex items-center gap-1.5 text-sm text-[#fdf6ec]/70 transition-colors hover:text-[#F4B8C1]"
-          >
-            <Clock size={16} />
-            Fil du temps
-          </Link>
-          <Link
-            href="/world"
-            className="flex items-center gap-1.5 text-sm text-[#fdf6ec]/70 transition-colors hover:text-[#F4B8C1]"
-          >
-            <Globe size={16} />
-            Monde
-          </Link>
-          <Link
-            href="/gallery"
-            className="flex items-center gap-1.5 text-sm text-[#fdf6ec]/70 transition-colors hover:text-[#F4B8C1]"
-          >
-            <ImageIcon size={16} />
-            Galerie
-          </Link>
-        </nav>
+        <DesktopNav />
 
         {/* Desktop right actions */}
         <div className="hidden items-center gap-4 md:flex">
-          <Link
-            href="/settings"
-            className="text-[#fdf6ec]/70 transition-colors hover:text-[#F4B8C1]"
-            aria-label="Settings"
-          >
-            <Settings size={18} />
-          </Link>
+          <SettingsNavLink />
           <form action={signOut}>
             <button
               type="submit"

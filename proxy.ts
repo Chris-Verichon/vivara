@@ -37,7 +37,7 @@ export async function proxy(request: NextRequest) {
 
   if (user && isAuthRoute) {
     const url = request.nextUrl.clone()
-    url.pathname = "/timeline"
+    url.pathname = "/"
     return NextResponse.redirect(url)
   }
 

@@ -7,6 +7,15 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [1.0.1] — 2026-06-19
+### Fixed
+- **Auth** — authenticated users hitting `/login` now land on the home page instead of the timeline, matching the post-sign-in redirect
+
+### Changed
+- **Navigation** — the desktop nav now highlights the active tab (and Settings) in rose, so the current section is always visible, consistent with the mobile bottom nav
+
+---
+
 ## [1.0.0] — 2026-05-31 — Production Release
 ### Summary
 First stable production release of Vivàra. All core features are complete, tested, and styled.
