@@ -95,12 +95,12 @@ export function SettingsForm({ config }: { config: Config }) {
 
       {/* Feedback */}
       {state.success && (
-        <p className="text-sm text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3">
+        <p className="text-sm text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-4 py-3">
           Paramètres sauvegardés avec succès.
         </p>
       )}
       {state.error && (
-        <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+        <p className="text-sm text-red-300 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
           {state.error}
         </p>
       )}
