@@ -163,6 +163,18 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-playfair), serif;
   }
+  /* Keep autofilled fields on the nocturnal theme — browsers otherwise paint
+     a solid white/yellow background that breaks the dark login & forms. */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-text-fill-color: #fdf6ec;
+    caret-color: #fdf6ec;
+    -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.04) inset;
+    transition: background-color 9999s ease-in-out 0s;
+  }
 }
 
 /* ---------------------------------------------------------------------------

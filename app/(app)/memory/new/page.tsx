@@ -258,7 +258,7 @@ export default function NewMemoryPage() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Un titre pour ce souvenir…"
-            className="w-full rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm text-[#1A1A1A] placeholder:text-[#AAAAAA] focus:outline-none focus:ring-2 focus:ring-[#C9748A]/30 focus:border-[#C9748A]"
+            className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-[#fdf6ec] placeholder:text-[#fdf6ec]/35 focus:outline-none focus:ring-2 focus:ring-[#C9748A]/30 focus:border-[#C9748A]"
             required
           />
         </div>
@@ -270,7 +270,7 @@ export default function NewMemoryPage() {
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#C9748A]/30 focus:border-[#C9748A]"
+            className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-[#fdf6ec] [color-scheme:dark] focus:outline-none focus:ring-2 focus:ring-[#C9748A]/30 focus:border-[#C9748A]"
             required
           />
         </div>
@@ -283,7 +283,7 @@ export default function NewMemoryPage() {
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Raconte ce souvenir…"
             rows={4}
-            className="w-full rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm text-[#1A1A1A] placeholder:text-[#AAAAAA] resize-none focus:outline-none focus:ring-2 focus:ring-[#C9748A]/30 focus:border-[#C9748A]"
+            className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-[#fdf6ec] placeholder:text-[#fdf6ec]/35 resize-none focus:outline-none focus:ring-2 focus:ring-[#C9748A]/30 focus:border-[#C9748A]"
           />
         </div>
 
@@ -302,26 +302,26 @@ export default function NewMemoryPage() {
               onFocus={() => setShowCountryList(true)}
               onBlur={() => setTimeout(() => setShowCountryList(false), 150)}
               placeholder="Rechercher un pays…"
-              className="w-full rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm text-[#1A1A1A] placeholder:text-[#AAAAAA] focus:outline-none focus:ring-2 focus:ring-[#C9748A]/30 focus:border-[#C9748A]"
+              className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-[#fdf6ec] placeholder:text-[#fdf6ec]/35 focus:outline-none focus:ring-2 focus:ring-[#C9748A]/30 focus:border-[#C9748A]"
             />
             {selectedCountry && (
               <button
                 type="button"
                 onClick={() => { setSelectedCountry(null); setCountryQuery("") }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#AAAAAA] hover:text-[#C9748A]"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#fdf6ec]/40 hover:text-[#C9748A]"
               >
                 <X size={14} />
               </button>
             )}
           </div>
           {showCountryList && countryQuery && !selectedCountry && filteredCountries.length > 0 && (
-            <ul className="absolute z-10 top-full mt-1 w-full bg-white border border-black/10 rounded-xl shadow-lg overflow-hidden">
+            <ul className="absolute z-10 top-full mt-1 w-full bg-[#0b0a14] border border-white/10 rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] overflow-hidden">
               {filteredCountries.map((c) => (
                 <li key={c.code}>
                   <button
                     type="button"
                     onMouseDown={() => handleSelectCountry(c)}
-                    className="w-full text-left px-4 py-2 text-sm text-[#1A1A1A] hover:bg-[#F4B8C1]/20 transition-colors"
+                    className="w-full text-left px-4 py-2 text-sm text-[#fdf6ec] hover:bg-[#F4B8C1]/15 hover:text-[#F4B8C1] transition-colors"
                   >
                     {c.name}
                   </button>
@@ -341,7 +341,7 @@ export default function NewMemoryPage() {
               onChange={(e) => setTagInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter" || e.key === ",") { e.preventDefault(); addTag() } }}
               placeholder="Ajouter un tag…"
-              className="flex-1 rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm text-[#1A1A1A] placeholder:text-[#AAAAAA] focus:outline-none focus:ring-2 focus:ring-[#C9748A]/30 focus:border-[#C9748A]"
+              className="flex-1 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-[#fdf6ec] placeholder:text-[#fdf6ec]/35 focus:outline-none focus:ring-2 focus:ring-[#C9748A]/30 focus:border-[#C9748A]"
             />
             <button
               type="button"
@@ -376,7 +376,7 @@ export default function NewMemoryPage() {
 
         {/* Error */}
         {formError && (
-          <p className="text-sm text-red-500 rounded-xl bg-red-50 px-4 py-2.5">{formError}</p>
+          <p className="text-sm text-red-300 rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-2.5">{formError}</p>
         )}
 
         {/* Submit */}

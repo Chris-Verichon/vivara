@@ -27,7 +27,7 @@ export function DeleteMemoryButton({ memoryId }: DeleteMemoryButtonProps) {
     <>
       <button
         onClick={() => setShowConfirm(true)}
-        className="flex items-center gap-1.5 text-sm text-[#888888] hover:text-red-500 transition-colors px-3 py-1.5 rounded-xl hover:bg-red-50"
+        className="flex items-center gap-1.5 text-sm text-[#fdf6ec]/60 hover:text-red-400 transition-colors px-3 py-1.5 rounded-xl hover:bg-red-500/10"
       >
         <Trash2 size={14} />
         Supprimer
@@ -44,11 +44,11 @@ export function DeleteMemoryButton({ memoryId }: DeleteMemoryButtonProps) {
             className="absolute inset-0 bg-black/40"
             onClick={() => setShowConfirm(false)}
           />
-          <div className="relative bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full flex flex-col gap-4">
-            <h2 className="text-lg font-medium text-[#1A1A1A]" style={{ fontFamily: "var(--font-playfair)" }}>
+          <div className="relative bg-[#12102a] border border-white/10 rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.6)] p-6 max-w-sm w-full flex flex-col gap-4">
+            <h2 className="text-lg font-medium text-[#fdf6ec]" style={{ fontFamily: "var(--font-playfair)" }}>
               Supprimer ce souvenir ?
             </h2>
-            <p className="text-sm text-[#888888]">
+            <p className="text-sm text-[#fdf6ec]/60">
               Cette action est irréversible. Le souvenir et tous ses médias seront définitivement supprimés.
             </p>
             <div className="flex gap-3 pt-1">
@@ -61,7 +61,7 @@ export function DeleteMemoryButton({ memoryId }: DeleteMemoryButtonProps) {
               </button>
               <button
                 onClick={() => setShowConfirm(false)}
-                className="flex-1 py-2.5 rounded-xl border border-black/10 text-sm text-[#888888] hover:text-[#1A1A1A] transition-colors"
+                className="flex-1 py-2.5 rounded-xl border border-white/15 text-sm text-[#fdf6ec]/70 hover:text-[#fdf6ec] hover:border-white/30 transition-colors"
               >
                 Annuler
               </button>

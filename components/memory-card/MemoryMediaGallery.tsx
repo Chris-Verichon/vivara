@@ -28,7 +28,7 @@ export function MemoryMediaGallery({ memory }: MemoryMediaGalleryProps) {
             <button
               key={file.id}
               onClick={() => setLightboxIndex(idx)}
-              className="relative aspect-square rounded-2xl overflow-hidden bg-[#F5F0EA] group focus-visible:ring-2 focus-visible:ring-[#C9748A] outline-none"
+              className="relative aspect-square rounded-2xl overflow-hidden bg-white/5 border border-white/8 group focus-visible:ring-2 focus-visible:ring-[#C9748A] outline-none"
               aria-label={`Ouvrir media ${idx + 1}`}
             >
               <Image

@@ -152,7 +152,7 @@ export function DropZone({ files, onChange, maxVideoSizeMB = 200 }: DropZoneProp
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
         className={`relative flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed px-6 py-10 cursor-pointer transition-colors
-          ${isDragging ? "border-[#C9748A] bg-[#F4B8C1]/10" : "border-black/10 hover:border-[#C9748A]/50 bg-[#FAF7F2]"}`}
+          ${isDragging ? "border-[#C9748A] bg-[#F4B8C1]/10" : "border-white/15 hover:border-[#C9748A]/50 bg-white/5"}`}
       >
         <input
           ref={inputRef}
@@ -166,13 +166,13 @@ export function DropZone({ files, onChange, maxVideoSizeMB = 200 }: DropZoneProp
           <ImageIcon className="w-6 h-6" />
           <Video className="w-6 h-6" />
         </div>
-        <p className="text-sm text-[#888888] text-center">
+        <p className="text-sm text-[#fdf6ec]/60 text-center">
           {processing
             ? "Traitement en cours…"
             : "Glissez des photos ou vidéos ici, ou cliquez pour sélectionner"}
         </p>
-        <p className="text-xs text-[#AAAAAA]">
-          Images jusqu'à {IMAGE_MAX_OUTPUT_MB} Mo · Vidéos jusqu'à {maxVideoSizeMB} Mo
+        <p className="text-xs text-[#fdf6ec]/40">
+          Images jusqu&apos;à {IMAGE_MAX_OUTPUT_MB} Mo · Vidéos jusqu&apos;à {maxVideoSizeMB} Mo
         </p>
       </div>
 
@@ -187,7 +187,7 @@ export function DropZone({ files, onChange, maxVideoSizeMB = 200 }: DropZoneProp
               onDragEnter={() => onDragEnterItem(index)}
               onDragEnd={onDropItem}
               onDragOver={(e) => e.preventDefault()}
-              className="relative group rounded-xl overflow-hidden aspect-square bg-[#FAF7F2] border border-black/5 cursor-grab active:cursor-grabbing"
+              className="relative group rounded-xl overflow-hidden aspect-square bg-white/5 border border-white/10 cursor-grab active:cursor-grabbing"
             >
               <Image
                 src={f.fileType === "video" && f.thumbnailUrl ? f.thumbnailUrl : f.previewUrl}

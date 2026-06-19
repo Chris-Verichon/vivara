@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export function MemoryCardSkeleton() {
   return (
-    <div className="rounded-2xl overflow-hidden bg-white shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
+    <div className="rounded-2xl overflow-hidden bg-[#12102a] border border-white/8 shadow-[0_4px_32px_rgba(0,0,0,0.40)]">
       <Skeleton className="w-full aspect-[4/3]" />
       <div className="p-4 flex flex-col gap-2">
         <Skeleton className="h-4 w-3/4" />

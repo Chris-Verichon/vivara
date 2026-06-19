@@ -1,11 +1,8 @@
 import { createClient } from "@/lib/supabase/server"
 import { GlobeWorld } from "@/components/world-map/GlobeWorld"
 import type { Memory } from "@/lib/types"
-
-type CountryRow = {
-  country_code: string
-  country_name: string
-}
+import Link from "next/link"
+import { Plus } from "lucide-react"
 
 async function getMemoriesByCountry() {
   const supabase = await createClient()
@@ -52,18 +49,27 @@ export default async function WorldPage() {
   return (
     <div className="max-w-6xl mx-auto px-6 py-12 flex flex-col gap-8">
       {/* Header */}
-      <div>
-        <h1
-          className="text-4xl md:text-5xl text-[#fdf6ec]"
-          style={{ fontFamily: "var(--font-playfair)" }}
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1
+            className="text-4xl md:text-5xl text-[#fdf6ec]"
+            style={{ fontFamily: "var(--font-playfair)" }}
+          >
+            Carte du monde
+          </h1>
+          <p className="mt-2 text-[#fdf6ec]/55 text-sm">
+            {countriesData.length === 0
+              ? "Renseigne un pays sur tes souvenirs pour les voir apparaître ici."
+              : `${countriesData.length} pays visité${countriesData.length > 1 ? "s" : ""} · ${memories.length} souvenir${memories.length > 1 ? "s" : ""}`}
+          </p>
+        </div>
+        <Link
+          href="/memory/new"
+          className="shrink-0 flex items-center gap-2 rounded-xl bg-[#C9748A] px-4 py-2 text-sm text-white transition-colors hover:bg-[#b5637a]"
         >
-          Carte du monde
-        </h1>
-        <p className="mt-2 text-[#fdf6ec]/55 text-sm">
-          {countriesData.length === 0
-            ? "Renseigne un pays sur tes souvenirs pour les voir apparaître ici."
-            : `${countriesData.length} pays visité${countriesData.length > 1 ? "s" : ""} · ${memories.length} souvenir${memories.length > 1 ? "s" : ""}`}
-        </p>
+          <Plus size={16} />
+          Ajouter
+        </Link>
       </div>
 
       <GlobeWorld countriesData={countriesData} />
