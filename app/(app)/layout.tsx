@@ -2,7 +2,7 @@ import { signOut } from "@/actions/auth"
 import { createClient } from "@/lib/supabase/server"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { LeafIcon } from "lucide-react"
+import { LeafIcon, LogOut } from "lucide-react"
 import { MobileNav } from "@/components/nav/MobileNav"
 import { DesktopNav, SettingsNavLink } from "@/components/nav/DesktopNav"
 
@@ -44,7 +44,19 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           </form>
         </div>
 
-        {/* Mobile — no burger, bottom nav handles navigation */}
+        {/* Mobile right actions — settings + sign out (bottom nav handles tabs) */}
+        <div className="flex items-center gap-4 md:hidden">
+          <SettingsNavLink />
+          <form action={signOut}>
+            <button
+              type="submit"
+              aria-label="Se déconnecter"
+              className="flex text-[#fdf6ec]/70 transition-colors hover:text-[#F4B8C1]"
+            >
+              <LogOut size={18} />
+            </button>
+          </form>
+        </div>
       </header>
 
       {/* Page content */}
