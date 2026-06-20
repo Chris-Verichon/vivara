@@ -200,6 +200,17 @@ select:-webkit-autofill:focus {
     radial-gradient(120% 120% at 50% 10%, var(--night-rose) 0%, var(--night) 45%, var(--night-deep) 100%);
 }
 
+/* Hide the native scrollbar on the drei ScrollControls element. Navigation
+   happens through the year rail and the scroll wheel / touch, so the gray
+   native scrollbar that surfaced while jumping added nothing but visual noise. */
+.hide-native-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge / IE */
+}
+.hide-native-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome / Safari */
+}
+
 /* Fade-in for HTML overlays mounted over the 3D scene */
 @keyframes night-fade-in {
   from { opacity: 0; transform: translateY(12px); }

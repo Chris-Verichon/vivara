@@ -317,7 +317,12 @@ export function ConstellationTimeline({ nodes }: ConstellationTimelineProps) {
   const [scrollEl, setScrollEl] = useState<HTMLElement | null>(null)
   const [activeYear, setActiveYear] = useState<number | null>(null)
 
-  const handleScrollEl = useCallback((el: HTMLElement) => setScrollEl(el), [])
+  const handleScrollEl = useCallback((el: HTMLElement) => {
+    // drei renders this overflow element with a native scrollbar; hide it so
+    // jumping via the year rail no longer flashes a gray scroll track.
+    el.classList.add("hide-native-scrollbar")
+    setScrollEl(el)
+  }, [])
 
   // Keep the rail's active year in sync with the current scroll position.
   useEffect(() => {
