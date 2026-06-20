@@ -7,6 +7,12 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [1.1.3] — 2026-06-20
+### Fixed
+- **Timeline — year rail** (`components/timeline/ConstellationTimeline.tsx`, `app/globals.css`): jumping to a year via the quick-travel rail flashed a gray native scrollbar. The jump scrolls the drei `ScrollControls` overflow element (`overflow-y: auto`), which exposed its native scrollbar mid-scroll. That scrollbar is now hidden cross-browser via a `.hide-native-scrollbar` utility applied to the scroll element — navigation stays driven by the rail and the wheel/touch
+
+---
+
 ## [1.1.2] — 2026-06-19
 ### Fixed
 - **Login / forms** (`app/globals.css`): autofilled inputs turned white again when focused. Tailwind's focus-ring (`@layer utilities`) box-shadow was overriding the autofill mask. The `-webkit-autofill` rules are now unlayered so they win over utilities, and the focused state composes both the dark mask and the rose focus ring in a single box-shadow
